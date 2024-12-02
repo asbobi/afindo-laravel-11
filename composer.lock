@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e61a9e00bbb47903e2f49a08bafe4ecb",
+    "content-hash": "52ccc38796c95893adbc7e6a37158991",
     "packages": [
         {
             "name": "brick/math",
@@ -505,6 +505,67 @@
                 }
             ],
             "time": "2023-10-06T06:47:41+00:00"
+        },
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.17.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
+            },
+            "require-dev": {
+                "cerdic/css-tidy": "^1.7 || ^2.0",
+                "simpletest/simpletest": "dev-master"
+            },
+            "suggest": {
+                "cerdic/css-tidy": "If you want to use the filter 'Filter.ExtractStyleBlocks'.",
+                "ext-bcmath": "Used for unit conversion and imagecrash protection",
+                "ext-iconv": "Converts text to and from non-UTF-8 encodings",
+                "ext-tidy": "Used for pretty-printing HTML"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ],
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "exclude-from-classmap": [
+                    "/library/HTMLPurifier/Language/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "support": {
+                "issues": "https://github.com/ezyang/htmlpurifier/issues",
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.17.0"
+            },
+            "time": "2023-11-17T15:01:25+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -1049,6 +1110,80 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "izniburak/laravel-auto-routes",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/izniburak/laravel-auto-routes.git",
+                "reference": "d8f1051cc0d8798fbb332054d7076813b5d8eb07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/izniburak/laravel-auto-routes/zipball/d8f1051cc0d8798fbb332054d7076813b5d8eb07",
+                "reference": "d8f1051cc0d8798fbb332054d7076813b5d8eb07",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "illuminate/routing": "^10.0|^11.0",
+                "phpunit/phpunit": "^10.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Buki\\AutoRoute\\AutoRouteServiceProvider"
+                    ],
+                    "aliases": {
+                        "AutoRoute": "Buki\\AutoRoute\\AutoRouteFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Buki\\AutoRoute\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "İzni Burak Demirtaş",
+                    "email": "info@burakdemirtas.org",
+                    "homepage": "https://buki.dev"
+                }
+            ],
+            "description": "Auto Route Generating (Auto-Discovery) Package for Laravel",
+            "homepage": "https://github.com/izniburak/laravel-auto-routes",
+            "keywords": [
+                "auto-route",
+                "laravel",
+                "route",
+                "route-discovery",
+                "route-generator",
+                "router"
+            ],
+            "support": {
+                "issues": "https://github.com/izniburak/laravel-auto-routes/issues",
+                "source": "https://github.com/izniburak/laravel-auto-routes/tree/v2.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://buymeacoff.ee/izniburak",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/izniburak",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-08-08T18:13:53+00:00"
         },
         {
             "name": "laravel/framework",
@@ -3182,6 +3317,72 @@
                 }
             ],
             "time": "2024-04-27T21:32:50+00:00"
+        },
+        {
+            "name": "stevebauman/purify",
+            "version": "v6.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stevebauman/purify.git",
+                "reference": "303d23e5756a1fd0e9b34f14459ec6aa327a8412"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stevebauman/purify/zipball/303d23e5756a1fd0e9b34f14459ec6aa327a8412",
+                "reference": "303d23e5756a1fd0e9b34f14459ec6aa327a8412",
+                "shasum": ""
+            },
+            "require": {
+                "ezyang/htmlpurifier": "^4.17",
+                "illuminate/contracts": "^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^5.0|^6.0|^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^8.0|^9.0|^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stevebauman\\Purify\\PurifyServiceProvider"
+                    ],
+                    "aliases": {
+                        "Purify": "Stevebauman\\Purify\\Facades\\Purify"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stevebauman\\Purify\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steve Bauman",
+                    "email": "steven_bauman@outlook.com"
+                }
+            ],
+            "description": "An HTML Purifier / Sanitizer for Laravel",
+            "keywords": [
+                "Purifier",
+                "clean",
+                "cleaner",
+                "html",
+                "laravel",
+                "purification",
+                "purify"
+            ],
+            "support": {
+                "issues": "https://github.com/stevebauman/purify/issues",
+                "source": "https://github.com/stevebauman/purify/tree/v6.2.0"
+            },
+            "time": "2024-03-12T15:22:59+00:00"
         },
         {
             "name": "symfony/clock",
@@ -5750,6 +5951,95 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yajra/laravel-datatables-oracle",
+            "version": "v11.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yajra/laravel-datatables.git",
+                "reference": "393296da329cf728873b0c9ac2fe8515d07871f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/393296da329cf728873b0c9ac2fe8515d07871f9",
+                "reference": "393296da329cf728873b0c9ac2fe8515d07871f9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^11",
+                "illuminate/filesystem": "^11",
+                "illuminate/http": "^11",
+                "illuminate/support": "^11",
+                "illuminate/view": "^11",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "algolia/algoliasearch-client-php": "^3.4.1",
+                "larastan/larastan": "^2.9.1",
+                "laravel/pint": "^1.14",
+                "laravel/scout": "^10.8.3",
+                "meilisearch/meilisearch-php": "^1.6.1",
+                "orchestra/testbench": "^9",
+                "rector/rector": "^1.0"
+            },
+            "suggest": {
+                "yajra/laravel-datatables-buttons": "Plugin for server-side exporting of dataTables.",
+                "yajra/laravel-datatables-editor": "Plugin to use DataTables Editor (requires a license).",
+                "yajra/laravel-datatables-export": "Plugin for server-side exporting using livewire and queue worker.",
+                "yajra/laravel-datatables-fractal": "Plugin for server-side response using Fractal.",
+                "yajra/laravel-datatables-html": "Plugin for server-side HTML builder of dataTables."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "11.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Yajra\\DataTables\\DataTablesServiceProvider"
+                    ],
+                    "aliases": {
+                        "DataTables": "Yajra\\DataTables\\Facades\\DataTables"
+                    }
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helper.php"
+                ],
+                "psr-4": {
+                    "Yajra\\DataTables\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arjay Angeles",
+                    "email": "aqangeles@gmail.com"
+                }
+            ],
+            "description": "jQuery DataTables API for Laravel",
+            "keywords": [
+                "datatables",
+                "jquery",
+                "laravel",
+                "yajra"
+            ],
+            "support": {
+                "issues": "https://github.com/yajra/laravel-datatables/issues",
+                "source": "https://github.com/yajra/laravel-datatables/tree/v11.1.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yajra",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-07-03T13:51:32+00:00"
         }
     ],
     "packages-dev": [

@@ -122,5 +122,5 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-
+    'my_encryption_key' => env('MY_ENCRYPTION_KEY'),
 ];

@@ -10,14 +10,11 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Zero configuration oo</h4>
+                        <h4 class="card-title">Zero configuration</h4>
                     </div>
                     <div class="card-content collapse show">
                         <div class="card-body card-dashboard">
-                            <div class="table-responsive">
-                                <x-data-table :columns="$columns" ajaxUrl="{{ $ajaxUrl }}" title="{{ $title }}"
-                                    addButton="{{ $addButton }}" />
-                            </div>
+                            <x-data-table :config="$config" />
                         </div>
                     </div>
                 </div>

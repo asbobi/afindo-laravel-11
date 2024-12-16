@@ -34,92 +34,11 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/core/colors/palette-gradient.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/fonts/simple-line-icons/style.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/pages/timeline.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/plugins/pickers/daterange/daterange.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/forms/selects/select2.min.css") }}">
 <!-- END: Page CSS-->
 
 <!-- BEGIN: Custom CSS-->
-<link rel="stylesheet" type="text/css" href="{{ asset("assets/css/style.css") }}">
+{{-- <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/style.css") }}"> --}}
 <!-- END: Custom CSS-->
-<style>
-    div.dt-buttons {
-        position: relative;
-        float: right;
-        margin-bottom: 10px;
-    }
-
-    .btn-datatabel {
-        margin: 2px;
-    }
-
-    .table tbody tr:last-child {
-        border-color: #dee2e6;
-    }
-
-    .filter {
-        height: 45px !important;
-    }
-
-    @media screen and (min-width: 768px) {
-
-        /* ketika screen width lebih dari 768px */
-        .dt-buttons {
-            margin-top: -12px;
-            margin-right: -10px;
-        }
-
-        div.dataTables_wrapper div.dataTables_paginate {
-            margin-top: -8px;
-            white-space: nowrap;
-            text-align: right;
-            margin-right: -10px;
-        }
-    }
-
-    #input-search {
-        height: 45px;
-    }
-
-    /* Gaya umum untuk pagination */
-    .dataTables_wrapper .dataTables_paginate {
-        float: right;
-        margin-top: 10px;
-    }
-
-    /* Gaya untuk setiap elemen pagination (angka dan tombol) */
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        margin: 0 4px;
-        padding: 5px 10px;
-        cursor: pointer;
-    }
-
-    /* Gaya untuk angka aktif */
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    /* Gaya untuk tombol "Next" dan "Previous" */
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        background-color: #eee;
-    }
-
-    /* Gaya untuk angka tidak dapat diklik pada pagination */
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-        pointer-events: none;
-        color: #ccc;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        border: 0px solid #ccc;
-        border-radius: 10px;
-        margin: 3px;
-        padding: 0px;
-        cursor: pointer;
-    }
-
-    div.dataTables_wrapper {
-        padding-top: 10px;
-        width: 100%;
-    }
-</style>
+@vite(['resources/css/app.css', 'resources/js/app.js'])

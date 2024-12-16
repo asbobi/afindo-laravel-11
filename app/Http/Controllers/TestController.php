@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class TestController extends Controller
 {
@@ -140,5 +143,37 @@ class TestController extends Controller
         }
 
         return response()->json(['message' => 'Data processing complete']);
+    }
+
+    public function getCetak()
+    {
+        $dataList = [];
+        for ($i = 1; $i <= 100; $i++) {
+            $data = [
+                'no' => $i,
+                'item' => 'Item ' . $i,
+                'kondisi' => 'Bekas',
+                'qty' => 1
+            ];
+            $dataList[] = $data;
+        }
+
+        $maxRowsPerPage = 13;
+
+        $pagedData = array_chunk($dataList, $maxRowsPerPage * 2);
+
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+
+        $dompdf = new Dompdf($options);
+
+        $html = view('packing_service', compact('pagedData'))->render();
+        $dompdf->setPaper([0, 0, 330, 210], 'landscape');
+
+        $dompdf->loadHtml($html);
+
+        $dompdf->render();
+
+        return $dompdf->stream('packing_service.pdf', ['Attachment' => false]);
     }
 }

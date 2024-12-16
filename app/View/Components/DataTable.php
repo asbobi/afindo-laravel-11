@@ -8,27 +8,24 @@ use Illuminate\View\Component;
 
 class DataTable extends Component
 {
+    public $config;
     public $ajaxUrl;
     public $title;
     public $columns = [];
-    public $addButton = false;
-    public $excelButton = false;
-    public $pdfButton = false;
+    public $addButton = '';
+    public $excelButton = '';
+    public $pdfButton = '';
 
     public function __construct(
-        $columns,
-        $ajaxUrl,
-        $title,
-        $addButton = false,
-        $excelButton = false,
-        $pdfButton = false
+        $config,
     ) {
-        $this->ajaxUrl = $ajaxUrl;
-        $this->title = $title;
-        $this->columns = $this->processColumns($columns);
-        $this->addButton = (bool)$addButton;
-        $this->excelButton = (bool)$excelButton;
-        $this->pdfButton = (bool)$pdfButton;
+        $this->config = $config;
+        $this->ajaxUrl = $config['ajaxUrl'];
+        $this->title = $config['title'];
+        $this->columns = $this->processColumns($config['columns']);
+        $this->addButton = $config['addButton'];
+        $this->excelButton = $config['excelButton'];
+        $this->pdfButton = $config['pdfButton'];
     }
 
     private function processColumns($columns)
@@ -54,6 +51,8 @@ class DataTable extends Component
 
     public function render()
     {
-        return view('components.data-table');
+        return view('components.data-table', [
+            'exportableColumns' => $this->getExportableColumns()
+        ]);
     }
 }

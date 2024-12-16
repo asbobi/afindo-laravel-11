@@ -23,13 +23,52 @@ class HomeController extends Controller
         $columns = [
             [
                 "data" => "DT_RowIndex",
-                "name" => "DT_RowIndex",
                 "orderable" => false,
                 "searchable" => false,
                 "name" => "No",
+                "cetak" => true
             ],
-            ["data" => "NamaLoket", "name" => "NamaLoket", "name" => "Nama Loket"],
-            ["data" => "NoLoket", "name" => "NoLoket", "name" => "No Loket"],
+            ["data" => "NamaLoket", "name" => "NamaLoket", "name" => "Nama Loket", "cetak" => true],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 1",
+                "cetak" => true
+            ],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 2",
+                "cetak" => true
+            ],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 3",
+                "cetak" => true
+            ],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 4",
+                "cetak" => true
+            ],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 5",
+                "cetak" => true
+            ],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 6",
+                "cetak" => true
+            ],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 7",
+                "cetak" => true
+            ],
+            [
+                "data" => "NoLoket",
+                "name" => "No Loket 8",
+                "cetak" => true
+            ],
         ];
 
         $config = [
@@ -44,13 +83,31 @@ class HomeController extends Controller
                     'type' => 'select',
                     'name' => 'IsAktif',
                     'id' => 'is-aktif',
-                    'label' => 'Is Aktif',
+                    'label' => '',
                 ],
                 [
                     'type' => 'daterange',
                     'name' => 'TanggalSampai',
                     'id' => 'tanggal',
-                    'label' => 'Is Aktif',
+                    'label' => '',
+                ],
+                [
+                    'type' => 'text',
+                    'name' => 'Cari',
+                    'id' => 'cari',
+                    'label' => '',
+                ],
+                [
+                    'type' => 'text',
+                    'name' => 'Cari',
+                    'id' => 'cari',
+                    'label' => '',
+                ],
+                [
+                    'type' => 'text',
+                    'name' => 'Cari',
+                    'id' => 'cari',
+                    'label' => '',
                 ]
             ]
         ];
@@ -58,8 +115,7 @@ class HomeController extends Controller
         return view('home.index', [
             'config' => $config,
             'ajaxUrl' => url('admin/home/listdata'),
-            'title' => 'Data Loket',
-            'addButton' => true
+            'title' => 'Data Loket'
         ]);
     }
 

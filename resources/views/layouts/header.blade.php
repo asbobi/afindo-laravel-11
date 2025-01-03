@@ -20,6 +20,9 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/weather-icons/climacons.min.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/fonts/meteocons/style.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/charts/morris.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/forms/icheck/icheck.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/forms/icheck/custom.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/forms/toggle/switchery.min.css") }}">
 <!-- END: Vendor CSS-->
 
 <!-- BEGIN: Theme CSS-->
@@ -34,11 +37,19 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/core/colors/palette-gradient.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/fonts/simple-line-icons/style.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/pages/timeline.css") }}">
+<link rel="stylesheet" type="text/css"
+    href="{{ asset("app-assets/vendors/css/pickers/daterange/daterangepicker.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/plugins/pickers/daterange/daterange.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/forms/selects/select2.min.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/pickers/pickadate/pickadate.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/vendors/css/extensions/sweetalert2.min.css") }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css"
+    integrity="sha512-EZSUkJWTjzDlspOoPSpUFR0o0Xy7jdzW//6qhUkoZ9c4StFkVsp9fbbd0O06p9ELS3H486m4wmrCELjza4JEog=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- END: Page CSS-->
 
 <!-- BEGIN: Custom CSS-->
 {{-- <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/style.css") }}"> --}}
 <!-- END: Custom CSS-->
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+@vite(["resources/css/app.css", "resources/js/app.js"])

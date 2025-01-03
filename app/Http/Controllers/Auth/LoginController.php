@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -46,23 +47,37 @@ class LoginController extends Controller
         ]);
 
         $credentials = $request->only('UserName', 'password');
-
         $user = User::where('UserName', $credentials['UserName'])->first();
+
         if (!$user) {
-            return redirect("login")->withErrors('User tidak ditemukan.');
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ditemukan.'
+            ], 404);
         }
+
         if (!Hash::check($credentials['password'], $user->Password, [])) {
-            return redirect("login")->withErrors('Password tidak sesuai.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Password tidak sesuai.'
+            ], 401);
         }
 
         $akseslevel = $this->akses->get_fitur($user->KodeLevel);
-        $request->session()->put('akses', $akseslevel);
+        session()->put('user', $user);
+        Cache::forever('akses_user', $akseslevel);
 
         if (Auth::attempt($credentials)) {
-            return redirect('home')
-                ->withSuccess('Signed in');
+            return response()->json([
+                'success' => true,
+                'message' => 'Login berhasil'
+            ]);
         }
-        return redirect("login")->withErrors('Login details are not valid');
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Login details are not valid'
+        ], 401);
     }
 
     protected function authenticated()
@@ -87,6 +102,7 @@ class LoginController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        Cache::forget('akses_user');
         return redirect('/');
     }
 }

@@ -276,3 +276,14 @@ if (!function_exists('getRomawi')) {
         }
     }
 }
+
+if (!function_exists('uploadPath')) {
+    function uploadPath($fileName = '')
+    {
+        if ($fileName) {
+            $fileName = '/' . $fileName;
+        }
+        $url = url('') . '/storage' . $fileName;
+        return $url;
+    }
+}

@@ -26,7 +26,7 @@
         if (skin.hasClass('skin-square')) {
           checkbox_default = 'icheckbox_square';
           radio_default = 'iradio_square';
-          checkbox === undefined && (checkbox = 'icheckbox_square-red', radio = 'iradio_square-red');
+          checkbox === undefined && (checkbox = 'icheckbox_square-green', radio = 'iradio_square-green');
         }
 
         if (skin.hasClass('skin-flat')) {
@@ -77,8 +77,8 @@
 
     // Square Checkbox & Radio
     $('.skin-square input').iCheck({
-        checkboxClass: 'icheckbox_square-red',
-        radioClass: 'iradio_square-red',
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
     });
     //Flat Checkbox & Radio
     $('.skin-flat input').iCheck({

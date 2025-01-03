@@ -15,6 +15,9 @@ class DataTable extends Component
     public $addButton = '';
     public $excelButton = '';
     public $pdfButton = '';
+    public $deleteButton = false;
+    public $deleteID = [];
+    public $deleteUrl = "";
 
     public function __construct(
         $config,
@@ -26,6 +29,9 @@ class DataTable extends Component
         $this->addButton = $config['addButton'];
         $this->excelButton = $config['excelButton'];
         $this->pdfButton = $config['pdfButton'];
+        $this->deleteButton = $config['deleteButton']['status'];
+        $this->deleteID = $config['deleteButton']['param'];
+        $this->deleteUrl = $config['deleteButton']['url'];
     }
 
     private function processColumns($columns)

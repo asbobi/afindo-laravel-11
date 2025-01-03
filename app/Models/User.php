@@ -16,10 +16,22 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'mstuserlogin';
+    protected $primaryKey = 'UserName'; // or null
+    public $timestamps = false;
+
+    public $incrementing = false;
+    
+    protected $keyType = 'string';
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'UserName',
+        'NamaLengkap',
+        'NoHP',
+        'IsAktif',
+        'KodeLevel',
+        'IsPetugasLoket',
+        'IsAdmin'
     ];
 
     /**
@@ -28,20 +40,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'Password',
+        //'remember_token',
     ];
+    public function getAuthPassword()
+    {
+        return $this->Password;
+    }
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 }

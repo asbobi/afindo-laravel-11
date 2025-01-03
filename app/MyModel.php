@@ -13,8 +13,19 @@ class MyModel extends Model
     protected $prefix = 'URUT';
     public $useAlias = false;
 
-    public function uploadFile($fileName, $uploadPath, $allowedFile = ['jpg', 'png'])
+    public function uploadFile($fileName, $uploadPath, $allowedFile = ['jpg', 'png'], $maxFileSize = 2048, $oldFile = '')
     {
+        //validation
+        $maxSize = $maxFileSize;
+        $file = request()->file($fileName);
+        if ($file->getSize() > $maxSize * 1024) {
+            return [
+                'status' => false,
+                'message' => 'Ukuran file tidak boleh melebihi ' . $maxSize . ' KB'
+            ];
+        }
+
+        $uploadPath = 'public/' . $uploadPath;
         // Pengecekan apakah path folder tersedia
         if (!Storage::exists($uploadPath)) {
             // Jika tidak tersedia, maka membuat direktori
@@ -29,7 +40,6 @@ class MyModel extends Model
         if (!is_writable(Storage::path($uploadPath))) {
             return ['status' => false, 'message' => 'folder untuk upload tidak dapat dimodifikasi.'];
         }
-
         if (request()->hasFile($fileName) && request()->file($fileName)->isValid()) {
             $file = request()->file($fileName);
 
@@ -41,6 +51,10 @@ class MyModel extends Model
             // Generate nama unik untuk file
             $uniqueFileName = uniqid() . '_' . time() . '.' . $file->extension();
 
+            // hapus file lama
+            if ($oldFile !== '' && Storage::exists($uploadPath . '/' . $oldFile)) {
+                Storage::delete($uploadPath . '/' . $oldFile);
+            }
             // Simpan file ke direktori yang ditentukan
             if ($file->storeAs($uploadPath, $uniqueFileName)) {
                 return ['status' => true, 'message' => 'berhasil mengupload file.', 'data' => $uniqueFileName];
@@ -404,6 +418,76 @@ class MyModel extends Model
                 }
             }
 
+            if (isset($params['orLike'])) {
+                if ($this->useAlias) {
+                    $originalColumn = $this->getReal();
+                } else {
+                    $originalColumn = $this->fillable;
+                }
+
+                $orLike = $params['orLike'];
+                if ($orLike != []) {
+                    // Menggunakan closure untuk membungkus semua kondisi OR LIKE dalam tanda kurung
+                    $query->where(function ($query) use ($orLike, $originalColumn) {
+                        if (is_string($orLike)) {
+                            // Jika orLike berupa string
+                            $query->orWhereRaw($orLike);
+                        } else if (is_array($orLike)) {
+                            if (array_key_first($orLike) === 0) {
+                                // Jika orLike adalah array multidimensi
+                                for ($i = 0; $i < count($orLike); $i++) {
+                                    $condition = $orLike[$i];
+                                    if (is_string($condition)) {
+                                        // Jika condition berupa string
+                                        $query->orWhereRaw($condition);
+                                    } elseif (is_array($condition)) {
+                                        // Jika condition berupa array
+                                        if (array_key_first($condition) !== 0) {
+                                            // Format [ 'key' => 'value' ]
+                                            foreach ($condition as $column => $value) {
+                                                if ($this->useAlias) {
+                                                    $column = $originalColumn[$column];
+                                                }
+                                                $query->orWhere($column, 'LIKE', "%$value%");
+                                            }
+                                        } else {
+                                            if (count($condition) === 2) {
+                                                // Format ['column', 'value']
+                                                $column = $condition[0];
+                                                if ($this->useAlias) {
+                                                    $column = $originalColumn[$column];
+                                                }
+                                                $value = $condition[1];
+                                                $query->orWhere($column, 'LIKE', "%$value%");
+                                            } else {
+                                                return [
+                                                    'status' => false,
+                                                    'message' => 'Format orLike tidak dikenali',
+                                                    'code' => 400
+                                                ];
+                                            }
+                                        }
+                                    } else {
+                                        return [
+                                            'status' => false,
+                                            'message' => 'Format orLike tidak dikenali',
+                                            'code' => 400
+                                        ];
+                                    }
+                                }
+                            } else {
+                                // Jika array hanya punya satu elemen key => value
+                                foreach ($orLike as $column => $value) {
+                                    if ($this->useAlias) {
+                                        $column = $originalColumn[$column];
+                                    }
+                                    $query->orWhere($column, 'LIKE', "%$value%");
+                                }
+                            }
+                        }
+                    });
+                }
+            }
 
             // orWhere
             // if (isset($params['orWhere'])) {
@@ -423,15 +507,67 @@ class MyModel extends Model
 
             // q => key to search
             if (isset($params['q'])) {
-                $search = $params['q']['searchAble'];
+                $search = $params['q']['searchAble'] ?? $params['select'] ?? null;
                 $value = $params['q']['value'];
-                if (!$search || !$value) {
-                    return [
-                        'status' => false,
-                        'message' => 'Format search query (q="kata yang dicari") tidak sesuai',
-                        'code' => 400
-                    ];
+                if (!$search || $search == '*' || $search == ['*']) {
+                    $search = $this->fillable;
                 }
+                if (is_string($search)) {
+                    $search = explode(',', $search);
+                }
+
+                if (!isset($params['q']['searchAble'])) {
+                    $searchTemp = [];
+                    $nowTable = $this->table;
+                    if (isset($params['from'])) {
+                        $nowTable = $params['from'];
+                    }
+                    foreach ($search as $val) {
+                        $val = trim($val);
+                        if (strpos($val, '(SELECT') === false && strpos($val, '( SELECT') === false) {
+                            if (strpos($val, '.') === false) {
+                                $val = $nowTable . '.' . $val;
+                            }
+                            $val = explode(' as ', $val)[0];
+                            $val = explode(' AS ', $val)[0];
+                            $val = trim($val);
+                            $searchTemp[] = $val;
+                        }
+                    }
+                    $search = $searchTemp;
+
+                    if (!$value && $value !== '0') {
+                        return [
+                            'status' => false,
+                            'message' => 'Format search query (q="kata yang dicari") tidak sesuai',
+                            'code' => 400
+                        ];
+                    }
+                    if (isset($params['join'])) {
+                        if (!is_string(array_key_first($params['join']))) {
+                            // [[ 'table' => , 'on' => , 'param'=> ]]
+                            foreach ($params['join'] as $table) {
+                                $table = $table['table'];
+                                $table = explode(' ', $table)[0];
+                                //jika penamaan tabel sama dengan model
+                                if (class_exists('app/Models/' . $table)) {
+                                    $modelFillable = app('app/Models/' . $table)->fillable;
+                                    foreach ($modelFillable as $col) {
+                                        $search[] = $table . '.' . $col;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $concat = 'CONCAT_WS(';
+                foreach ($search as $col) {
+                    $concat .= 'COALESCE(' . $col . ', \'\')' . ', ' . '\' \', ';
+                }
+                $concat = rtrim($concat, ', \'');
+                $concat .= ')';
+                $query->havingRaw($concat . " LIKE ?", ["%{$value}%"]);
             }
 
             // order
@@ -444,6 +580,22 @@ class MyModel extends Model
             if (isset($params['groupBy'])) {
                 $group = $params['groupBy'];
                 $query->groupBy($group);
+            }
+
+            // having
+            $having = $params['having'] ?? [];
+            if ($having) {
+                if (is_string($having)) {
+                    $query->havingRaw($having);
+                } elseif (is_array($having)) {
+                    foreach ($having as $h) {
+                        if (is_string($h)) {
+                            $query->havingRaw($h);
+                        } elseif (is_array($h)) {
+                            $query->having($h);
+                        }
+                    }
+                }
             }
         }
 
@@ -655,15 +807,67 @@ class MyModel extends Model
 
             // q => key to search
             if (isset($params['q'])) {
-                $search = $params['q']['searchAble'];
+                $search = $params['q']['searchAble'] ?? $params['select'] ?? null;
                 $value = $params['q']['value'];
-                if (!$search || !$value) {
-                    return [
-                        'status' => false,
-                        'message' => 'Format search query (q="kata yang dicari") tidak sesuai',
-                        'code' => 400
-                    ];
+                if (!$search || $search == '*' || $search == ['*']) {
+                    $search = $this->fillable;
                 }
+                if (is_string($search)) {
+                    $search = explode(',', $search);
+                }
+
+                if (!isset($params['q']['searchAble'])) {
+                    $searchTemp = [];
+                    $nowTable = $this->table;
+                    if (isset($params['from'])) {
+                        $nowTable = $params['from'];
+                    }
+                    foreach ($search as $val) {
+                        $val = trim($val);
+                        if (strpos($val, '(SELECT') === false && strpos($val, '( SELECT') === false) {
+                            if (strpos($val, '.') === false) {
+                                $val = $nowTable . '.' . $val;
+                            }
+                            $val = explode(' as ', $val)[0];
+                            $val = explode(' AS ', $val)[0];
+                            $val = trim($val);
+                            $searchTemp[] = $val;
+                        }
+                    }
+                    $search = $searchTemp;
+
+                    if (!$value && $value !== '0') {
+                        return [
+                            'status' => false,
+                            'message' => 'Format search query (q="kata yang dicari") tidak sesuai',
+                            'code' => 400
+                        ];
+                    }
+                    if (isset($params['join'])) {
+                        if (!is_string(array_key_first($params['join']))) {
+                            // [[ 'table' => , 'on' => , 'param'=> ]]
+                            foreach ($params['join'] as $table) {
+                                $table = $table['table'];
+                                $table = explode(' ', $table)[0];
+                                //jika penamaan tabel sama dengan model
+                                if (class_exists('app/Models/' . $table)) {
+                                    $modelFillable = app('app/Models/' . $table)->fillable;
+                                    foreach ($modelFillable as $col) {
+                                        $search[] = $table . '.' . $col;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $concat = 'CONCAT_WS(';
+                foreach ($search as $col) {
+                    $concat .= 'COALESCE(' . $col . ', \'\')' . ', ' . '\' \', ';
+                }
+                $concat = rtrim($concat, ', \'');
+                $concat .= ')';
+                $query->havingRaw($concat . " LIKE ?", ["%{$value}%"]);
             }
 
             // order
@@ -859,11 +1063,161 @@ class MyModel extends Model
                 }
             }
 
+            if (isset($params['orLike'])) {
+                if ($this->useAlias) {
+                    $originalColumn = $this->getReal();
+                } else {
+                    $originalColumn = $this->fillable;
+                }
+
+                $orLike = $params['orLike'];
+                if ($orLike != []) {
+                    // Menggunakan closure untuk membungkus semua kondisi OR LIKE dalam tanda kurung
+                    $query->where(function ($query) use ($orLike, $originalColumn) {
+                        if (is_string($orLike)) {
+                            // Jika orLike berupa string
+                            $query->orWhereRaw($orLike);
+                        } else if (is_array($orLike)) {
+                            if (array_key_first($orLike) === 0) {
+                                // Jika orLike adalah array multidimensi
+                                for ($i = 0; $i < count($orLike); $i++) {
+                                    $condition = $orLike[$i];
+                                    if (is_string($condition)) {
+                                        // Jika condition berupa string
+                                        $query->orWhereRaw($condition);
+                                    } elseif (is_array($condition)) {
+                                        // Jika condition berupa array
+                                        if (array_key_first($condition) !== 0) {
+                                            // Format [ 'key' => 'value' ]
+                                            foreach ($condition as $column => $value) {
+                                                if ($this->useAlias) {
+                                                    $column = $originalColumn[$column];
+                                                }
+                                                $query->orWhere($column, 'LIKE', "%$value%");
+                                            }
+                                        } else {
+                                            if (count($condition) === 2) {
+                                                // Format ['column', 'value']
+                                                $column = $condition[0];
+                                                if ($this->useAlias) {
+                                                    $column = $originalColumn[$column];
+                                                }
+                                                $value = $condition[1];
+                                                $query->orWhere($column, 'LIKE', "%$value%");
+                                            } else {
+                                                return [
+                                                    'status' => false,
+                                                    'message' => 'Format orLike tidak dikenali',
+                                                    'code' => 400
+                                                ];
+                                            }
+                                        }
+                                    } else {
+                                        return [
+                                            'status' => false,
+                                            'message' => 'Format orLike tidak dikenali',
+                                            'code' => 400
+                                        ];
+                                    }
+                                }
+                            } else {
+                                // Jika array hanya punya satu elemen key => value
+                                foreach ($orLike as $column => $value) {
+                                    if ($this->useAlias) {
+                                        $column = $originalColumn[$column];
+                                    }
+                                    $query->orWhere($column, 'LIKE', "%$value%");
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            if (isset($params['q'])) {
+                $search = $params['q']['searchAble'] ?? $params['select'] ?? null;
+                $value = $params['q']['value'];
+                if (!$search || $search == '*' || $search == ['*']) {
+                    $search = $this->fillable;
+                }
+                if (is_string($search)) {
+                    $search = explode(',', $search);
+                }
+
+                if (!isset($params['q']['searchAble'])) {
+                    $searchTemp = [];
+                    $nowTable = $this->table;
+                    if (isset($params['from'])) {
+                        $nowTable = $params['from'];
+                    }
+                    foreach ($search as $val) {
+                        $val = trim($val);
+                        if (strpos($val, '(SELECT') === false && strpos($val, '( SELECT') === false) {
+                            if (strpos($val, '.') === false) {
+                                $val = $nowTable . '.' . $val;
+                            }
+                            $val = explode(' as ', $val)[0];
+                            $val = explode(' AS ', $val)[0];
+                            $val = trim($val);
+                            $searchTemp[] = $val;
+                        }
+                    }
+                    $search = $searchTemp;
+
+                    if (!$value && $value !== '0') {
+                        return [
+                            'status' => false,
+                            'message' => 'Format search query (q="kata yang dicari") tidak sesuai',
+                            'code' => 400
+                        ];
+                    }
+                    if (isset($params['join'])) {
+                        if (!is_string(array_key_first($params['join']))) {
+                            // [[ 'table' => , 'on' => , 'param'=> ]]
+                            foreach ($params['join'] as $table) {
+                                $table = $table['table'];
+                                $table = explode(' ', $table)[0];
+                                //jika penamaan tabel sama dengan model
+                                if (class_exists('app/Models/' . $table)) {
+                                    $modelFillable = app('app/Models/' . $table)->fillable;
+                                    foreach ($modelFillable as $col) {
+                                        $search[] = $table . '.' . $col;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $concat = 'CONCAT_WS(';
+                foreach ($search as $col) {
+                    $concat .= 'COALESCE(' . $col . ', \'\')' . ', ' . '\' \', ';
+                }
+                $concat = rtrim($concat, ', \'');
+                $concat .= ')';
+                $query->havingRaw($concat . " LIKE ?", ["%{$value}%"]);
+            }
 
             // group
             if (isset($params['groupBy'])) {
                 $group = $params['groupBy'];
                 $query->groupBy($group);
+            }
+
+            // having
+            $having = $params['having'] ?? [];
+            if ($having) {
+                if (is_string($having)) {
+                    $query->havingRaw($having);
+                } elseif (is_array($having)) {
+                    foreach ($having as $h) {
+                        if (is_string($h)) {
+                            $query->havingRaw($h);
+                        } elseif (is_array($h)) {
+                            $query->having($h);
+                        }
+                    }
+                }
             }
         }
 
@@ -935,6 +1289,9 @@ class MyModel extends Model
 
     public function createId($prefix, $primaryKey = '', $table = '')
     {
+        if ($table == '') {
+            $table = $this->table;
+        }
         $kode = 1;
         $data = DB::table($table)->select($primaryKey . " AS kode")->orderByRaw("RIGHT(" . $primaryKey . ", 7) DESC")->first();
         if ($data) {

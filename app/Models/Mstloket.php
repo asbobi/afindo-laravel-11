@@ -19,6 +19,8 @@ class Mstloket extends MyModel
         "FileAudio",
         "IsAktif",
         "IsAvailable",
-        "UserName"
+        "UserName",
+        "FotoLoket",
+        "TglLoket"
     ];
 }

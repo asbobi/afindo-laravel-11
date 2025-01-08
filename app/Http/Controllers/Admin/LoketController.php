@@ -30,7 +30,11 @@ class LoketController extends Controller
                 "name" => "No",
                 "cetak" => true
             ],
-            ["data" => "NamaLoket", "name" => "NamaLoket", "name" => "Nama Loket", "cetak" => true],
+            [
+                "data" => "NamaLoket",
+                "name" => "NamaLoket",
+                "cetak" => true
+            ],
             [
                 "data" => "NoLoket",
                 "name" => "No Loket",
@@ -155,7 +159,7 @@ class LoketController extends Controller
         $aktif = $params['is-aktif'] ?? '';
         unset($params['is-aktif']);
         if ($aktif != '') {
-            $params['where'][] = ['IsAktif', '=', (int)$aktif];
+            $params['where'][] = ['IsAktif', '=', (int) $aktif];
         }
 
         $params['pre_datatable'] = function ($datatable) {
@@ -244,7 +248,7 @@ class LoketController extends Controller
             unset($insertdata['FileAudioLama']);
         }
 
-        $insertdata['IsAktif'] = $request->has('IsAktif') ? (int)$request->IsAktif : 0;
+        $insertdata['IsAktif'] = $request->has('IsAktif') ? (int) $request->IsAktif : 0;
 
         if ($IDLoket == '') {
             ## tambah data

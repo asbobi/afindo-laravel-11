@@ -1302,22 +1302,39 @@ class MyModel extends Model
         return $kode_jadi;
     }
 
-    public function insertData($data = null)
+    public function insertData($data = null, $table = '')
     {
         if ($data == null) {
             $data = $this->attributes;
         }
         $data_cleaned = Purify::clean($data);
-        return self::create($data_cleaned);
+        if($table == '') {
+            return self::create($data_cleaned);
+        }else{
+            return DB::table($table)->insert($data_cleaned);
+        }
     }
 
-    public function updateData($data = null, $wheredata)
+    public function updateData($data = null, $wheredata, $table = '')
     {
         if ($data == null) {
             $data = $this->attributes;
         }
         $data_cleaned = Purify::clean($data);
-        return self::where($wheredata)->update($data_cleaned);
+        if($table == '') {
+            return self::where($wheredata)->update($data_cleaned);
+        }else{
+            return DB::table($table)->where($wheredata)->update($data_cleaned);
+        }
+    }
+
+    public function deleteData($wheredata, $table = '')
+    {
+        if($table == '') {
+            return self::where($wheredata)->delete();
+        }else{
+            return DB::table($table)->where($wheredata)->delete();
+        }
     }
 
     public function countData($wheredata)

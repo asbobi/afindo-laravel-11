@@ -3,6 +3,7 @@
 
     <head>
         @include("layouts.header")
+        @stack("styles")
         @yield("styles")
     </head>
     <!-- END: Head-->

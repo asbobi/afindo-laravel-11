@@ -1,8 +1,8 @@
-@push('styles')
+@push("styles")
     <style>
         .table-input .form-control {
             padding: 4px 8px;
-            height: 34px;
+            /* height: 34px; */
         }
 
         .table-input {
@@ -27,11 +27,11 @@
         <table class="table table-input table-bordered w-100 {{ $class }}">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th width="5%" class="text-center">No</th>
                     @foreach ($columns as $column)
-                        <th>{{ $column['header'] }}</th>
+                        <th>{{ $column["header"] }}</th>
                     @endforeach
-                    <th>Aksi</th>
+                    <th width="5%" class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,33 +43,33 @@
                 @endphp
                 @foreach (@$items as $item)
                     <tr>
-                        <td>
+                        <td class="text-center">
                             <span class="no">1</span>
                         </td>
                         @foreach ($columns as $column)
                             <td>
 
-                                @if ($column['type'] == 'select')
-                                    <select class="form-control select2-item" name="{{ $column['data'] }}[]">
-                                        @foreach ($column['options'] as $label => $value)
+                                @if ($column["type"] == "select")
+                                    <select class="form-control select2-item" name="{{ $column["data"] }}[]">
+                                        @foreach ($column["options"] as $label => $value)
                                             <option value="{{ $value }}"
-                                                {{ @$item->{$column['data']} == $value ? 'selected' : '' }}>
+                                                {{ @$item->{$column["data"]} == $value ? "selected" : "" }}>
                                                 {{ $label }}
                                             </option>
                                         @endforeach
                                     </select>
-                                @elseif($column['type'] == 'textarea')
-                                    <textarea class="form-control" name="{{ $column['data'] }}[]" {{ !$column['editable'] && $edit ? 'readonly' : '' }}>{{ @$item->{$column['data']} }}</textarea>
+                                @elseif($column["type"] == "textarea")
+                                    <textarea class="form-control" name="{{ $column["data"] }}[]" {{ !$column["editable"] && $edit ? "readonly" : "" }}>{{ @$item->{$column["data"]} }}</textarea>
                                 @else
-                                    <input type="text" class="form-control" name="{{ $column['data'] }}[]"
-                                        value="{{ @$item->{$column['data']} }}"
-                                        {{ !$column['editable'] && $edit ? 'readonly' : '' }}>
+                                    <input type="text" class="form-control"
+                                        name="{{ $column["data"] }}[]" value="{{ @$item->{$column["data"]} }}"
+                                        {{ !$column["editable"] && $edit ? "readonly" : "" }}>
                                 @endif
 
-                                {!! $column['append'] !!}
+                                {!! $column["append"] !!}
                             </td>
                         @endforeach
-                        <td>
+                        <td class="text-center">
                             <button type="button" class="btn text-danger" onclick="removeItem(this)">
                                 <i class="fa fa-trash"></i>
                             </button>
@@ -86,8 +86,7 @@
 </div>
 {!! $cover[1] !!}
 
-
-@push('scripts')
+@push("scripts")
     <script>
         //table input action
         let rowTemplate = $('.table-input tbody tr').first().clone();

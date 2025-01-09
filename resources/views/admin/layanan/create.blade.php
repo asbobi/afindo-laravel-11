@@ -35,18 +35,6 @@
                                                     value="{{ @$data['NamaLayanan'] }}" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="controls">
-                                                    <div class="skin skin-square">
-                                                        <input name="IsAktif" type="checkbox" value="1"
-                                                            id="single_checkbox"
-                                                            {{ @$data['IsAktif'] > 0 ? 'checked' : '' }} required>
-                                                        <label for="single_checkbox">Is Aktif</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <x-table-input :config="$table_input_config" />
                                     </div>
                                 </div>

@@ -103,6 +103,16 @@
                     }
                 },
                 columns: {!! json_encode($columns) !!},
+                columnDefs: [
+                    @foreach ($columns as $index => $column)
+                        @if (isset($column["width"]))
+                            {
+                                width: "{{ $column["width"] }}",
+                                targets: {{ $index }}
+                            },
+                        @endif
+                    @endforeach
+                ],
                 lengthChange: true,
                 buttons: [
                     @if (is_bool($excelButton))

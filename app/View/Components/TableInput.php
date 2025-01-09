@@ -15,7 +15,7 @@ class TableInput extends Component
     public $config;
     public $items;
 
-    
+
     public function __construct(
         $label = null,
         $class = null,
@@ -32,7 +32,7 @@ class TableInput extends Component
         $cover = $cover ?? $this->config['cover'] ?? ['<div class="col-md-12">', '</div>'];
         $columns = $columns ?? $this->config['columns'];
         $items = $items ?? $this->config['items'] ?? [];
-        
+
         if($label){
             $this->label = '<label>'.$label.'</label>';
         }

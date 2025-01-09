@@ -30,7 +30,8 @@ class LayananController extends Controller
                 "orderable" => false,
                 "searchable" => false,
                 "name" => "No",
-                "cetak" => true
+                "cetak" => true,
+                "width" => "5%"
             ],
             [
                 "data" => "NamaLayanan",
@@ -38,15 +39,12 @@ class LayananController extends Controller
                 "cetak" => true
             ],
             [
-                "data" => "IsAktif",
-                "name" => "IsAktif",
-                "cetak" => true
-            ],
-            [
+                "class" => "text-center",
                 "data" => "action",
                 "name" => "#",
                 "cetak" => false,
-                "delete" => true
+                "delete" => true,
+                "width" => "5%"
             ],
         ];
 
@@ -94,9 +92,7 @@ class LayananController extends Controller
         ];
 
         $params['pre_datatable'] = function ($datatable) {
-            return $datatable->editColumn('IsAvailable', function ($row) {
-                return $row->IsAvailable == 1 ? '&#10004;' : '&#x2716;';
-            })->addColumn('action', function ($row) {
+            return $datatable->addColumn('action', function ($row) {
                 $button = '<a style="padding:5px;" class="text-warning" href="' . url('admin/layanan/create/' . my_encrypt($row->IDLayanan)) . '"><i class="feather icon-edit-1"></i></a>
 
                     ';
@@ -107,7 +103,7 @@ class LayananController extends Controller
                         return my_encrypt($row->IDLayanan);
                     },
                 ])
-                ->rawColumns(['action', 'IsAvailable']);
+                ->rawColumns(['action']);
         };
 
         return $this->layanan->getRows($params);
@@ -132,8 +128,8 @@ class LayananController extends Controller
             ])['data'];
         }
 
-        //bisa dari array biasa atau dari DB dengan query 
-        $jenisItem = collect([ 
+        //bisa dari array biasa atau dari DB dengan query
+        $jenisItem = collect([
             [
                 'id' => '1',
                 'text' => 'Item 1',

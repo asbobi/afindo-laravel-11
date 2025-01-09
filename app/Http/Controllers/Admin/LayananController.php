@@ -161,7 +161,7 @@ class LayananController extends Controller
                 [
                     'header' => 'Jenis Item',
                     'data' => 'JenisItem',
-                    'editable' => true,
+                    'editable' => false,
                     'type' => 'select',
                     'options' => $jenisItem->pluck('id', 'text')->toArray()
                 ]
@@ -189,6 +189,7 @@ class LayananController extends Controller
         $narasi = $insertdata['Narasi'];
         $jenisitem = $insertdata['JenisItem'];
         foreach ($narasi as $key => $value) {
+            if($value == '') continue;
             $itemLayanan[] = [
                 'NoUrut' => $key + 1,
                 'IDLayanan' => $IDLayanan,

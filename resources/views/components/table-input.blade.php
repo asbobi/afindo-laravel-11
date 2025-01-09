@@ -70,9 +70,9 @@
             </thead>
             <tbody>
                 @php
-                    $edit = $items !== null;
-                    if (empty($items) || !is_array($items)) {
-                        $items = [[]];
+                    $edit = isset($items);
+                    if(count($items) == 0) {
+                        $items = [0 => []];
                     }
                 @endphp
                 @foreach (@$items as $item)
@@ -82,9 +82,8 @@
                         </td>
                         @foreach ($columns as $column)
                             <td>
-
                                 @if ($column['type'] == 'select')
-                                    <select class="form-control select2-item" name="{{ $column['data'] }}[]" {{ !$column['editable'] && $edit ? 'readonly' : '' }}>
+                                    <select class="form-control select2-item" name="{{ $column['data'] }}[]" {{ !$column['editable'] && $edit && @$item->{$column['data']} ? 'readonly' : '' }}>
                                         @foreach ($column['options'] as $label => $value)
                                             <option value="{{ $value }}"
                                                 {{ @$item->{$column['data']} == $value ? 'selected' : '' }}>
@@ -93,11 +92,11 @@
                                         @endforeach
                                     </select>
                                 @elseif($column['type'] == 'textarea')
-                                    <textarea class="form-control" name="{{ $column['data'] }}[]" {{ !$column['editable'] && $edit ? 'readonly' : '' }}>{{ @$item->{$column['data']} }}</textarea>
+                                    <textarea class="form-control" name="{{ $column['data'] }}[]" {{ !$column['editable'] && $edit && @$item->{$column['data']} ? 'readonly' : '' }}>{{ @$item->{$column['data']} }}</textarea>
                                 @else
                                     <input type="text" class="form-control" name="{{ $column['data'] }}[]"
                                         value="{{ @$item->{$column['data']} }}"
-                                        {{ !$column['editable'] && $edit ? 'readonly' : '' }}>
+                                        {{ !$column['editable'] && $edit && @$item->{$column['data']} ? 'readonly' : '' }}>
                                 @endif
 
                                 {!! $column['append'] !!}

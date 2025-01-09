@@ -15,6 +15,6 @@ class Mstlayanan extends MyModel
     protected $fillable = [
         "IDLayanan",
         "NamaLayanan",
-        "IsAktif",
+        "IsAktif"
     ];
 }

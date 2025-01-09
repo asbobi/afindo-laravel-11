@@ -12,6 +12,7 @@ class DataTable extends Component
     public $ajaxUrl;
     public $title;
     public $columns = [];
+    public $importButton = '';
     public $addButton = '';
     public $excelButton = '';
     public $pdfButton = '';
@@ -23,15 +24,16 @@ class DataTable extends Component
         $config,
     ) {
         $this->config = $config;
-        $this->ajaxUrl = $config['ajaxUrl'];
-        $this->title = $config['title'];
+        $this->ajaxUrl = @$config['ajaxUrl'];
+        $this->title = @$config['title'];
         $this->columns = $this->processColumns($config['columns']);
-        $this->addButton = $config['addButton'];
-        $this->excelButton = $config['excelButton'];
-        $this->pdfButton = $config['pdfButton'];
-        $this->deleteButton = $config['deleteButton']['status'];
-        $this->deleteID = $config['deleteButton']['param'];
-        $this->deleteUrl = $config['deleteButton']['url'];
+        $this->importButton = isset($config['importButton']) ? $config['importButton'] : false;
+        $this->addButton = isset($config['addButton']) ? $config['addButton'] : false;
+        $this->excelButton = isset($config['excelButton']) ? $config['excelButton'] : false;
+        $this->pdfButton = isset($config['pdfButton']) ? $config['pdfButton'] : false;
+        $this->deleteButton = isset($config['deleteButton']['status']) ? $config['deleteButton']['status'] : false;
+        $this->deleteID = $this->deleteButton ? $config['deleteButton']['param'] : '';
+        $this->deleteUrl = $this->deleteButton ? $config['deleteButton']['url'] : '';
     }
 
     private function processColumns($columns)

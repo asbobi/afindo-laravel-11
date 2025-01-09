@@ -46,12 +46,14 @@
             </div>
         </div>
         <div class="table-filter-button">
-            <button id="btn-cari" class="btn btn-primary" type="button"><i
+            <button id="btn-cari" class="btn btn-primary" style="height: 40px;" type="button"><i
                     class="feather icon-search font-medium-4"></i></button>
         </div>
     </div>
     <div class="btn-input-wrapper">
-        <button class="btn btn-warning">Import</button>
+        {!! isset($importButton) && $importButton != ""
+            ? '<a class="btn btn-warning" href="' . $importButton . '">Import</a>'
+            : "" !!}
         {!! isset($excelButton)
             ? (!is_string($excelButton) && $excelButton != ""
                 ? '<button id="exportExcelBtn" class="btn btn-primary">Export Excel</button>'
@@ -68,7 +70,7 @@
     </div>
     <div class="row row-table">
         <div class="col-12">
-            <table class="table table-striped table-bordered zero-configuration yajra-datatable">
+            <table class="table table-striped table-bordered zero-configuration yajra-datatable display" width="100%">
                 <thead>
                     <tr>
                         @foreach ($columns as $column)

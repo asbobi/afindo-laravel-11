@@ -36,7 +36,8 @@ class LoginController extends Controller
 
     public function index()
     {
-        return view('auth.login');
+        $x = [];
+        return view('auth.login', $x);
     }
 
     public function proses_login(Request $request)

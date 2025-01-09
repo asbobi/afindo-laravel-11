@@ -38,7 +38,6 @@
                 @php
                     $edit = $items !== null;
                     if (empty($items) || !is_array($items)) {
-                        echo 'jalan';
                         $items = [[]];
                     }
                 @endphp

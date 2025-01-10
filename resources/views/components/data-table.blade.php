@@ -1,3 +1,8 @@
+<style>
+    .paging-false {
+        margin-top: 40px !important;
+    }
+</style>
 <div>
     <div class="filter-box">
         <div class="table-filter">
@@ -92,9 +97,14 @@
                 serverSide: true,
                 dom: 'lfr<"table-wrapper" t>ipB',
                 searching: false,
+                paging: {{ isset($paginate) && $paginate != true ? "false" : "true" }},
                 ajax: {
                     url: "{{ $ajaxUrl }}",
                     data: function(d) {
+                        @if (isset($paginate) && $paginate != true)
+
+                            d.length = -1;
+                        @endif
                         $('.filter-input').each(function() {
                             var inputId = $(this).find('input, select').attr('id');
                             d[inputId] = $('#' + inputId)
@@ -178,9 +188,82 @@
                         },
                     @endif
                 ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    $('tr.custom-row').remove();
+                    var totalColumns = {!! json_encode($columns) !!};
+                    var addRow = {{ $addRow ? "true" : "false" }};
+                    if (addRow) {
+                        var totalValues = {};
+                        var totalIndexes = [];
+                        totalColumns.forEach(function(column, index) {
+                            if (column.total) {
+                                totalValues[column.data] = 0;
+                                totalIndexes.push(index);
+                            }
+                        });
+
+                        api.rows({
+                            page: 'current'
+                        }).every(function(rowIdx, tableLoop, rowLoop) {
+                            var data = this.data();
+                            totalColumns.forEach(function(column) {
+                                if (column.total) {
+                                    var value = data[column.data];
+
+                                    if (typeof value === 'string') {
+                                        value = value.replace(/[^0-9,-]+/g,
+                                            ''
+                                        );
+                                    }
+                                    totalValues[column.data] += parseFloat(value) || 0;
+                                }
+                            });
+                        });
+                        var totalRow = '<tr class="custom-row">';
+                        var lastColspanEnd = 0;
+
+                        totalIndexes.forEach(function(totalIndex, totalCount) {
+                            var colspan = totalIndex - lastColspanEnd;
+                            if (colspan > 0) {
+                                var label = totalColumns[totalIndex].label || 'Total Kolom ' + (
+                                    totalCount + 1);
+                                totalRow += '<td colspan="' + colspan + '">' + label + ':</td>';
+                            }
+
+                            var column = totalColumns[totalIndex];
+
+                            var totalFormatted;
+                            if (column.format && column.format.toLowerCase() === 'rp') {
+                                totalFormatted = 'Rp ' + totalValues[column.data]
+                                    .toLocaleString(
+                                        'id-ID');
+                            } else {
+                                totalFormatted = totalValues[column.data];
+                            }
+
+                            totalRow += '<td class="' + (column.class || '') + '">' +
+                                totalFormatted + '</td>';
+                            lastColspanEnd = totalIndex + 1;
+                        });
+                        var remainingColspan = totalColumns.length - lastColspanEnd;
+                        if (remainingColspan > 0) {
+                            totalRow += '<td colspan="' + remainingColspan + '"></td>';
+                        }
+
+                        totalRow += '</tr>';
+                        $('tbody').append(totalRow);
+                    }
+                },
                 language: {
                     url: "{{ asset("assets/js/language_id.json") }}",
                 },
+                initComplete: function(settings, json) {
+                    let paging = {{ isset($paginate) && $paginate != true ? "false" : "true" }};
+                    if (!paging && $(window).width() > 640) {
+                        $('.dataTables_wrapper').addClass('paging-false');
+                    }
+                }
             });
 
             @if ($deleteButton)

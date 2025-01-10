@@ -19,6 +19,8 @@ class DataTable extends Component
     public $deleteButton = false;
     public $deleteID = [];
     public $deleteUrl = "";
+    public $paginate = true;
+    public $addRow = false;
 
     public function __construct(
         $config,
@@ -34,6 +36,8 @@ class DataTable extends Component
         $this->deleteButton = isset($config['deleteButton']['status']) ? $config['deleteButton']['status'] : false;
         $this->deleteID = $this->deleteButton ? $config['deleteButton']['param'] : '';
         $this->deleteUrl = $this->deleteButton ? $config['deleteButton']['url'] : '';
+        $this->paginate = isset($config['paginate']) ? $config['paginate'] : true;
+        $this->addRow = isset($config['addRow']) ? $config['addRow'] : false;
     }
 
     private function processColumns($columns)

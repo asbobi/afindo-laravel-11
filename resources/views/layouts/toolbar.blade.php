@@ -2,13 +2,24 @@
     <div class="navbar-wrapper">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
-                <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
-                        href="#"><i class="feather icon-menu font-large-1"></i></a></li>
-                <li class="nav-item"><a class="navbar-brand" href="{{ route("home") }}"><img class="brand-logo"
-                            alt="stack admin logo" src="{{ asset("app-assets/images/logo/logo.png") }}" height="30">
-                    </a></li>
-                <li class="nav-item d-md-none"><a class="nav-link open-navbar-container" data-toggle="collapse"
-                        data-target="#navbar-mobile"><i class="fa fa-ellipsis-v"></i></a></li>
+                <li class="nav-item mobile-menu d-md-none mr-auto">
+                    <a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#">
+                        <i class="feather icon-menu font-large-1"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="navbar-brand" href="{{ route('home') }}">
+                        <img class="brand-logo" alt="stack admin logo"
+                            src="{{ asset('app-assets/images/logo/logo.png') }}" height="30">
+                        <img class="brand-logo-mini" alt="stack admin logo"
+                            src="{{ asset('app-assets/images/logo/logo-mini.png') }}" height="30">
+                    </a>
+                </li>
+                <li class="nav-item d-md-none">
+                    <a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="navbar-container content">
@@ -101,7 +112,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <div class="avatar avatar-online avatar-sm rounded-circle"><img
-                                                    src="{{ asset("app-assets/images/portrait/small/avatar-s-1.png") }}"
+                                                    src="{{ asset('app-assets/images/portrait/small/avatar-s-1.png') }}"
                                                     alt="avatar"><i></i></div>
                                         </div>
                                         <div class="media-body">
@@ -116,7 +127,7 @@
                                     <div class="media">
                                         <div class="media-left"><span
                                                 class="avatar avatar-sm avatar-busy rounded-circle"><img
-                                                    src="{{ asset("app-assets/images/portrait/small/avatar-s-2.png") }}"
+                                                    src="{{ asset('app-assets/images/portrait/small/avatar-s-2.png') }}"
                                                     alt="avatar"><i></i></span></div>
                                         <div class="media-body">
                                             <h6 class="media-heading">Bret Lezama</h6>
@@ -130,7 +141,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <div class="avatar avatar-online avatar-sm rounded-circle"><img
-                                                    src="{{ asset("app-assets/images/portrait/small/avatar-s-3.png") }}"
+                                                    src="{{ asset('app-assets/images/portrait/small/avatar-s-3.png') }}"
                                                     alt="avatar"><i></i></div>
                                         </div>
                                         <div class="media-body">
@@ -145,7 +156,7 @@
                                     <div class="media">
                                         <div class="media-left"><span
                                                 class="avatar avatar-sm avatar-away rounded-circle"><img
-                                                    src="{{ asset("app-assets/images/portrait/small/avatar-s-6.png") }}"
+                                                    src="{{ asset('app-assets/images/portrait/small/avatar-s-6.png') }}"
                                                     alt="avatar"><i></i></span></div>
                                         <div class="media-body">
                                             <h6 class="media-heading">Eric Alsobrook</h6>
@@ -163,7 +174,7 @@
                     <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link"
                             href="#" data-toggle="dropdown">
                             <div class="avatar avatar-online"><img
-                                    src="{{ asset("app-assets/images/portrait/small/avatar-s-1.png") }}"
+                                    src="{{ asset('app-assets/images/portrait/small/avatar-s-1.png') }}"
                                     alt="avatar"><i></i></div><span class="user-name">John Doe</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
@@ -173,7 +184,7 @@
                                     class="feather icon-check-square"></i> Task</a><a class="dropdown-item"
                                 href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
                             <div class="dropdown-divider"></div><a class="dropdown-item"
-                                href="{{ route("logout") }}"><i class="feather icon-power"></i> Logout</a>
+                                href="{{ route('logout') }}"><i class="feather icon-power"></i> Logout</a>
                         </div>
                     </li>
                 </ul>

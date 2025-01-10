@@ -90,7 +90,8 @@
             var table = $('.yajra-datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                dom: 'lfr<"table-wrapper" t>ipB',
+                // dom: 'lfr<"table-wrapper" t>ipB',
+                dom: 'lfr<t>ipB',
                 searching: false,
                 ajax: {
                     url: "{{ $ajaxUrl }}",

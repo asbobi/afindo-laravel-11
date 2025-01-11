@@ -17,7 +17,8 @@ class KunjunganController extends Controller
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
         $this->kunjungan = new TrKunjungan();
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->akses = $this->getAkses();
     }
 
     public function getIndex(Request $request)
@@ -88,7 +89,7 @@ class KunjunganController extends Controller
             "ajaxUrl" => url('admin/kunjungan/listdata'),
             "columns" => $columns,
             "title" => "Data Kunjungan",
-            "deleteButton" => [
+            "deleteButton" => !$this->akses->DeleteData ? false : [
                 'status' => false
             ],
             "addButton" => false,

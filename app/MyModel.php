@@ -1302,15 +1302,29 @@ class MyModel extends Model
         return $kode_jadi;
     }
 
+    public function createIdInt($primaryKey = '', $table = '')
+    {
+        if (!$table) {
+            $table = $this->table;
+        }
+        $kode = 0;
+        $data = DB::table($table)->selectRaw('CAST(' . $primaryKey . " AS UNSIGNED) AS kode")->orderByRaw("kode DESC")->first();
+        if ($data) {
+            $kode = $data->kode;
+        }
+        $kode++;
+        return $kode;
+    }
+
     public function insertData($data = null, $table = '')
     {
         if ($data == null) {
             $data = $this->attributes;
         }
         $data_cleaned = Purify::clean($data);
-        if($table == '') {
+        if ($table == '') {
             return self::create($data_cleaned);
-        }else{
+        } else {
             return DB::table($table)->insert($data_cleaned);
         }
     }
@@ -1321,18 +1335,18 @@ class MyModel extends Model
             $data = $this->attributes;
         }
         $data_cleaned = Purify::clean($data);
-        if($table == '') {
+        if ($table == '') {
             return self::where($wheredata)->update($data_cleaned);
-        }else{
+        } else {
             return DB::table($table)->where($wheredata)->update($data_cleaned);
         }
     }
 
     public function deleteData($wheredata, $table = '')
     {
-        if($table == '') {
+        if ($table == '') {
             return self::where($wheredata)->delete();
-        }else{
+        } else {
             return DB::table($table)->where($wheredata)->delete();
         }
     }

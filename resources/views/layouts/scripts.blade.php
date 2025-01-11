@@ -69,7 +69,7 @@
 
     function showSwal(icon, title, text) {
         return Swal.fire({
-            icon: icon,
+            type: icon,
             title: title,
             text: text
         })

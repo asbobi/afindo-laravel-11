@@ -20,7 +20,7 @@ class Akseslevel extends MyModel
     public function get_fitur($kodelevel = '')
     {
         $data = DB::table('fiturlevel')
-        ->selectRaw('fiturlevel.KodeFitur, fiturlevel.ViewData, serverfitur.NamaFitur, serverfitur.KelompokFitur, serverfitur.Icon, serverfitur.Url, serverfitur.Slug')
+        ->selectRaw('fiturlevel.KodeFitur, fiturlevel.ViewData, fiturlevel.AddData, fiturlevel.EditData, fiturlevel.EditData, fiturlevel.DeleteData, fiturlevel.PrintData, serverfitur.NamaFitur, serverfitur.KelompokFitur, serverfitur.Icon, serverfitur.Url, serverfitur.Slug')
         ->leftJoin('serverfitur', function ($join) {
             $join->on('serverfitur.KodeFitur', '=', 'fiturlevel.KodeFitur');
         })->where('fiturlevel.KodeLevel', $kodelevel)

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\View;
 class KunjunganController extends Controller
 {
     private $menu = 'Lap. Kunjungan';
+    private $kunjungan;
     public function __construct()
     {
         View::share('menu', $this->menu);

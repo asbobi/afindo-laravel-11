@@ -45,7 +45,10 @@ class KunjunganController extends Controller
                 "data" => "NoAntrian",
                 "name" => "No. Antrian",
                 "cetak" => true,
-                "class" => "text-center"
+                "class" => "text-right",
+                "total" => true,
+                "format" => "RP",
+                "label" => "Total No. Antrian"
             ],
             [
                 "data" => "NamaLoket",
@@ -61,7 +64,10 @@ class KunjunganController extends Controller
                 "data" => "NilaiSPM",
                 "name" => "Anggap Saja Rupiah",
                 "cetak" => true,
-                "class" => "text-right"
+                "class" => "text-right",
+                "total" => true,
+                "label" => "Total Nilai SPM"
+
             ],
             [
                 "data" => "StatusAntrian",
@@ -86,6 +92,10 @@ class KunjunganController extends Controller
             ->toArray();
 
         $config = [
+            ## digunakan untuk menghilangkan pagination, biasanya untuk format laporan
+            "paginate" => false,
+            ## tambahkan addRow jika ingin menampilkan total, hitung total dari variable $columns dengan menambahkan atribut "total" => true dan atribut "label" => "label total"
+            "addRow" => true,
             "ajaxUrl" => url('admin/kunjungan/listdata'),
             "columns" => $columns,
             "title" => "Data Kunjungan",
@@ -218,6 +228,8 @@ class KunjunganController extends Controller
         $params['pre_datatable'] = function ($datatable) {
             return $datatable->editColumn('StatusAntrian', function ($row) {
                 return '<div class="badge badge-primary">' . $row->StatusAntrian . '</div>';
+            })->editColumn('NoAntrian', function ($row) {
+                return "Rp. " . number_format($row->NoAntrian, 0);
             })
                 ->rawColumns(['StatusAntrian']);
         };

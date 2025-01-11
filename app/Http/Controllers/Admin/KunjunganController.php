@@ -44,7 +44,7 @@ class KunjunganController extends Controller
                 "data" => "NoAntrian",
                 "name" => "No. Antrian",
                 "cetak" => true,
-                "class" => "text-center",
+                "class" => "text-right",
                 "total" => true,
                 "format" => "RP",
                 "label" => "Total No. Antrian"

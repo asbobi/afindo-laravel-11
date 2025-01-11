@@ -27,6 +27,13 @@ class LayananController extends Controller
     {
         $columns = [
             [
+                "data" => null,
+                "orderable" => false,
+                "searchable" => false,
+                "name" => "checkbox",
+                "width" => "5%"
+            ],
+            [
                 "data" => "DT_RowIndex",
                 "orderable" => false,
                 "searchable" => false,

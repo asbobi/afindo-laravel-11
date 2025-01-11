@@ -4,16 +4,16 @@
     }
 </style>
 <div>
-    @if ($config['filters'])
+    @if ($config["filters"])
         <div class="filter-box">
             <div class="table-filter">
                 <div class="row justify-content-end">
-                    @foreach ($config['filters'] as $filter)
-                        @if ($filter['type'] == 'daterange')
+                    @foreach ($config["filters"] as $filter)
+                        @if ($filter["type"] == "daterange")
                             <div class="form-group col-4 filter-input">
-                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
+                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
                                 <div class="input-group">
-                                    <input type="text" class="form-control showdropdowns" id="{{ $filter['id'] }}">
+                                    <input type="text" class="form-control showdropdowns" id="{{ $filter["id"] }}">
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <span class="fa fa-calendar"></span>
@@ -22,13 +22,13 @@
                                 </div>
                             </div>
                         @endif
-                        @if ($filter['type'] == 'select')
+                        @if ($filter["type"] == "select")
                             <div class="form-group col-4 filter-input">
-                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
-                                <select class="form-control select2" id="{{ $filter['id'] }}">
-                                    @if (isset($filter['options']))
-                                        @foreach ($filter['options'] as $option)
-                                            <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
+                                <select class="form-control select2" id="{{ $filter["id"] }}">
+                                    @if (isset($filter["options"]))
+                                        @foreach ($filter["options"] as $option)
+                                            <option value="{{ $option["value"] }}">{{ $option["label"] }}</option>
                                         @endforeach
                                     @else
                                         <option value="">-</option>
@@ -36,12 +36,12 @@
                                 </select>
                             </div>
                         @endif
-                        @if ($filter['type'] == 'text')
+                        @if ($filter["type"] == "text")
                             <div class="form-group col-4">
-                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
+                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
                                 <fieldset class="form-group position-relative mb-0 filter-input">
                                     <input type="text" class="form-control form-control-xl input-xl"
-                                        id="{{ $filter['id'] }}" placeholder="Pencarian ...">
+                                        id="{{ $filter["id"] }}" placeholder="Pencarian ...">
                                     <div class="form-control-position">
                                         <i class="feather icon-search font-medium-4"></i>
                                     </div>
@@ -58,24 +58,24 @@
         </div>
     @endif
     <div class="btn-input-wrapper">
-        {!! isset($importButton) && $importButton != ''
+        {!! isset($importButton) && $importButton != ""
             ? '<a class="btn btn-warning" href="' . $importButton . '">Import</a>'
-            : '' !!}
-        {!! isset($excelButton) && $excelButton != ''
-            ? (!is_string($excelButton) && $excelButton != ''
+            : "" !!}
+        {!! isset($excelButton) && $excelButton != ""
+            ? (!is_string($excelButton) && $excelButton != ""
                 ? '<button id="exportExcelBtn" class="btn btn-primary">Export Excel</button>'
                 : '<a class="btn btn-primary" href="' . $excelButton . '">Export Excel</a>')
-            : '' !!}
-        {!! isset($pdfButton) && $pdfButton != ''
-            ? (!is_string($pdfButton) && $pdfButton != ''
+            : "" !!}
+        {!! isset($pdfButton) && $pdfButton != ""
+            ? (!is_string($pdfButton) && $pdfButton != ""
                 ? '<button id="printPdfBtn" class="btn btn-primary">Print Pdf</button>'
                 : '<a class="btn btn-primary" href="' . $pdfButton . '">Print Pdf</a>')
-            : '' !!}
-        {!! isset($addButton) && $addButton != ''
+            : "" !!}
+        {!! isset($addButton) && $addButton != ""
             ? '<a class="btn btn-primary" href="' . $addButton . '">Tambah</a>'
-            : '' !!}
+            : "" !!}
     </div>
-    {{-- @if($title)
+    {{-- @if ($title)
         <h4 class="mb-1">{{ $title }}</h4>
     @endif --}}
     <div class="row row-table">
@@ -84,7 +84,11 @@
                 <thead>
                     <tr>
                         @foreach ($columns as $column)
-                            <th>{{ $column['name'] }}</th>
+                            @if ($column["name"] == "checkbox")
+                                <th><input type="checkbox" id="checkAll" /></th>
+                            @else
+                                <th>{{ $column["name"] }}</th>
+                            @endif
                         @endforeach
                     </tr>
                 </thead>
@@ -94,14 +98,15 @@
     </div>
 </div>
 
-@push('scripts')
+@push("scripts")
     <script>
         $(document).ready(function() {
+            var selectedIds = [];
+
             var table = $('.yajra-datatable').DataTable({
                 processing: true,
                 serverSide: true,
                 dom: 'lfr<"table-wrapper" t>ipB',
-                // dom: 'lfr<t>ipB',
                 searching: false,
                 paging: {{ isset($paginate) && $paginate != true ? "false" : "true" }},
                 ajax: {
@@ -118,12 +123,30 @@
                         });
                     }
                 },
-                columns: {!! json_encode($columns) !!},
+                // columns: {!! json_encode($columns) !!},
+                columns: [
+                    @foreach ($columns as $index => $column)
+                        @if (isset($column["name"]) && $column["name"] === "checkbox")
+                            {
+                                data: null,
+                                orderable: false,
+                                searchable: false,
+                                class: "text-center",
+                                render: function(data, type, row) {
+                                    return '<input type="checkbox" class="chebok" data-id="' + row
+                                        .NamaLayanan + '" />';
+                                }
+                            },
+                        @else
+                            {!! json_encode($column) !!},
+                        @endif
+                    @endforeach
+                ],
                 columnDefs: [
                     @foreach ($columns as $index => $column)
-                        @if (isset($column['width']))
+                        @if (isset($column["width"]))
                             {
-                                width: "{{ $column['width'] }}",
+                                width: "{{ $column["width"] }}",
                                 targets: {{ $index }}
                             },
                         @endif
@@ -411,7 +434,7 @@
                     }
                 },
                 language: {
-                    url: "{{ asset('assets/js/language_id.json') }}",
+                    url: "{{ asset("assets/js/language_id.json") }}",
                 },
                 initComplete: function(settings, json) {
                     let paging = {{ isset($paginate) && $paginate != true ? "false" : "true" }};
@@ -513,6 +536,38 @@
 
             $('#btn-cari').click(function() {
                 table.ajax.reload();
+            });
+
+            $('#checkAll').on('click', function() {
+                var checked = $(this).prop('checked');
+                $('.chebok').each(function() {
+                    $(this).prop('checked', checked);
+
+                    var id = $(this).data('id');
+                    if (checked) {
+                        if (!selectedIds.includes(id)) {
+                            selectedIds.push(id);
+                        }
+                    } else {
+                        selectedIds = selectedIds.filter(item => item !== id);
+                    }
+
+                    console.log('selectedIds : ', selectedIds);
+                });
+            });
+
+            $('.yajra-datatable').on('change', '.chebok', function() {
+                var id = $(this).data('id');
+                if ($(this).prop('checked')) {
+                    if (!selectedIds.includes(id)) {
+                        selectedIds.push(id);
+                    }
+                } else {
+                    selectedIds = selectedIds.filter(item => item !== id);
+                }
+                console.log('selectedIds : ', selectedIds);
+                var allChecked = ($('.chebok:checked').length === $('.chebok').length);
+                $('#checkAll').prop('checked', allChecked);
             });
         });
 

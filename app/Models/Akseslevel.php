@@ -15,7 +15,7 @@ class Akseslevel extends MyModel
         "KodeLevel",
         "NamaLevel",
         "IsAktif"
-    ]; 
+    ];
 
     public function get_fitur($kodelevel = '')
     {
@@ -26,7 +26,7 @@ class Akseslevel extends MyModel
         })->where('fiturlevel.KodeLevel', $kodelevel)
         ->where('fiturlevel.ViewData', 1)
         ->where('serverfitur.IsAktif', 1)
-        ->orderBy('fiturlevel.KodeFitur');
+        ->orderBy('serverfitur.NoUrut');
         return $data->get();
     }
 

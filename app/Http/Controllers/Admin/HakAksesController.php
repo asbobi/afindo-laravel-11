@@ -29,6 +29,7 @@ class HakAksesController extends Controller
                 "orderable" => false,
                 "searchable" => false,
                 "name" => "No",
+                "width" => "5%"
             ],
             [
                 "data" => "NamaLevel",
@@ -97,7 +98,8 @@ class HakAksesController extends Controller
                     ]
                 ],
                 'where' => [
-                    'fiturlevel.KodeLevel' => $kodelevel
+                    'fiturlevel.KodeLevel' => $kodelevel,
+                    'serverfitur.IsAktif' => 1
                 ]
             ])['data'];
         }

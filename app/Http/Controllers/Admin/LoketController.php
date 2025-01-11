@@ -17,7 +17,8 @@ class LoketController extends Controller
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
         $this->loket = new Mstloket();
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->akses = $this->getAkses();
     }
 
     public function getIndex(Request $request)
@@ -78,12 +79,12 @@ class LoketController extends Controller
             "ajaxUrl" => url('admin/loket/listdata'),
             "columns" => $columns,
             "title" => "Data Loket",
-            "deleteButton" => [
+            "deleteButton" => !$this->akses->EditData ? false : [
                 'status' => true,
                 'param' => ['id', 'no'],
                 'url' => url('admin/loket/delete')
             ],
-            "addButton" => url('admin/loket/create'),
+            "addButton" => !$this->akses->AddData ? false : url('admin/loket/create'),
             "excelButton" => true,
             "pdfButton" => true,
             "filters" => [

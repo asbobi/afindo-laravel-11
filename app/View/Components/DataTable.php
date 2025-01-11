@@ -36,6 +36,7 @@ class DataTable extends Component
         $this->deleteButton = isset($config['deleteButton']['status']) ? $config['deleteButton']['status'] : false;
         $this->deleteID = $this->deleteButton ? $config['deleteButton']['param'] : '';
         $this->deleteUrl = $this->deleteButton ? $config['deleteButton']['url'] : '';
+        $this->config['filters'] = $this->config['filters'] ?? [];
         $this->paginate = isset($config['paginate']) ? $config['paginate'] : true;
         $this->addRow = isset($config['addRow']) ? $config['addRow'] : false;
     }

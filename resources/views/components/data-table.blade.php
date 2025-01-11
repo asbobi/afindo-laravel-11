@@ -4,82 +4,87 @@
     }
 </style>
 <div>
-    <div class="filter-box">
-        <div class="table-filter">
-            <div class="row justify-content-end">
-                @foreach ($config["filters"] as $filter)
-                    @if ($filter["type"] == "daterange")
-                        <div class="form-group col-4 filter-input">
-                            {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
-                            <div class="input-group">
-                                <input type="text" class="form-control showdropdowns" id="{{ $filter["id"] }}">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <span class="fa fa-calendar"></span>
-                                    </span>
+    @if ($config['filters'])
+        <div class="filter-box">
+            <div class="table-filter">
+                <div class="row justify-content-end">
+                    @foreach ($config['filters'] as $filter)
+                        @if ($filter['type'] == 'daterange')
+                            <div class="form-group col-4 filter-input">
+                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
+                                <div class="input-group">
+                                    <input type="text" class="form-control showdropdowns" id="{{ $filter['id'] }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endif
-                    @if ($filter["type"] == "select")
-                        <div class="form-group col-4 filter-input">
-                            {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
-                            <select class="form-control select2" id="{{ $filter["id"] }}">
-                                @if (isset($filter["options"]))
-                                    @foreach ($filter["options"] as $option)
-                                        <option value="{{ $option["value"] }}">{{ $option["label"] }}</option>
-                                    @endforeach
-                                @else
-                                    <option value="">-</option>
-                                @endif
-                            </select>
-                        </div>
-                    @endif
-                    @if ($filter["type"] == "text")
-                        <div class="form-group col-4">
-                            {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
-                            <fieldset class="form-group position-relative mb-0 filter-input">
-                                <input type="text" class="form-control form-control-xl input-xl"
-                                    id="{{ $filter["id"] }}" placeholder="Pencarian ...">
-                                <div class="form-control-position">
-                                    <i class="feather icon-search font-medium-4"></i>
-                                </div>
-                            </fieldset>
-                        </div>
-                    @endif
-                @endforeach
+                        @endif
+                        @if ($filter['type'] == 'select')
+                            <div class="form-group col-4 filter-input">
+                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
+                                <select class="form-control select2" id="{{ $filter['id'] }}">
+                                    @if (isset($filter['options']))
+                                        @foreach ($filter['options'] as $option)
+                                            <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="">-</option>
+                                    @endif
+                                </select>
+                            </div>
+                        @endif
+                        @if ($filter['type'] == 'text')
+                            <div class="form-group col-4">
+                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
+                                <fieldset class="form-group position-relative mb-0 filter-input">
+                                    <input type="text" class="form-control form-control-xl input-xl"
+                                        id="{{ $filter['id'] }}" placeholder="Pencarian ...">
+                                    <div class="form-control-position">
+                                        <i class="feather icon-search font-medium-4"></i>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+            <div class="table-filter-button">
+                <button id="btn-cari" class="btn btn-primary" style="height: 40px;" type="button"><i
+                        class="feather icon-search font-medium-4"></i></button>
             </div>
         </div>
-        <div class="table-filter-button">
-            <button id="btn-cari" class="btn btn-primary" style="height: 40px;" type="button"><i
-                    class="feather icon-search font-medium-4"></i></button>
-        </div>
-    </div>
+    @endif
     <div class="btn-input-wrapper">
-        {!! isset($importButton) && $importButton != ""
+        {!! isset($importButton) && $importButton != ''
             ? '<a class="btn btn-warning" href="' . $importButton . '">Import</a>'
-            : "" !!}
-        {!! isset($excelButton)
-            ? (!is_string($excelButton) && $excelButton != ""
+            : '' !!}
+        {!! isset($excelButton) && $excelButton != ''
+            ? (!is_string($excelButton) && $excelButton != ''
                 ? '<button id="exportExcelBtn" class="btn btn-primary">Export Excel</button>'
                 : '<a class="btn btn-primary" href="' . $excelButton . '">Export Excel</a>')
-            : "" !!}
-        {!! isset($pdfButton)
-            ? (!is_string($pdfButton) && $pdfButton != ""
+            : '' !!}
+        {!! isset($pdfButton) && $pdfButton != ''
+            ? (!is_string($pdfButton) && $pdfButton != ''
                 ? '<button id="printPdfBtn" class="btn btn-primary">Print Pdf</button>'
                 : '<a class="btn btn-primary" href="' . $pdfButton . '">Print Pdf</a>')
-            : "" !!}
-        {!! isset($addButton) && $addButton != ""
+            : '' !!}
+        {!! isset($addButton) && $addButton != ''
             ? '<a class="btn btn-primary" href="' . $addButton . '">Tambah</a>'
-            : "" !!}
+            : '' !!}
     </div>
+    {{-- @if($title)
+        <h4 class="mb-1">{{ $title }}</h4>
+    @endif --}}
     <div class="row row-table">
         <div class="col-12">
             <table class="table table-striped table-bordered zero-configuration yajra-datatable display" width="100%">
                 <thead>
                     <tr>
                         @foreach ($columns as $column)
-                            <th>{{ $column["name"] }}</th>
+                            <th>{{ $column['name'] }}</th>
                         @endforeach
                     </tr>
                 </thead>
@@ -89,13 +94,14 @@
     </div>
 </div>
 
-@push("scripts")
+@push('scripts')
     <script>
         $(document).ready(function() {
             var table = $('.yajra-datatable').DataTable({
                 processing: true,
                 serverSide: true,
                 dom: 'lfr<"table-wrapper" t>ipB',
+                // dom: 'lfr<t>ipB',
                 searching: false,
                 paging: {{ isset($paginate) && $paginate != true ? "false" : "true" }},
                 ajax: {
@@ -115,9 +121,9 @@
                 columns: {!! json_encode($columns) !!},
                 columnDefs: [
                     @foreach ($columns as $index => $column)
-                        @if (isset($column["width"]))
+                        @if (isset($column['width']))
                             {
-                                width: "{{ $column["width"] }}",
+                                width: "{{ $column['width'] }}",
                                 targets: {{ $index }}
                             },
                         @endif
@@ -405,7 +411,7 @@
                     }
                 },
                 language: {
-                    url: "{{ asset("assets/js/language_id.json") }}",
+                    url: "{{ asset('assets/js/language_id.json') }}",
                 },
                 initComplete: function(settings, json) {
                     let paging = {{ isset($paginate) && $paginate != true ? "false" : "true" }};

@@ -19,7 +19,8 @@ class LayananController extends Controller
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
         $this->layanan = new Mstlayanan();
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->akses = $this->getAkses();
     }
 
     public function getIndex(Request $request)
@@ -48,16 +49,23 @@ class LayananController extends Controller
             ],
         ];
 
+        // if ($this->akses->DeleteData) {
+        //     $deleteButton = [
+        //         'status' => true,
+        //         'param' => ['id', 'no'],
+        //         'url' => url('admin/layanan/delete')
+        //     ];
+        // }
         $config = [
             "ajaxUrl" => url('admin/layanan/listdata'),
             "columns" => $columns,
             "title" => "Data Layanan",
-            "deleteButton" => [
+            "deleteButton" => !$this->akses->DeleteData ? false : [
                 'status' => true,
                 'param' => ['id', 'no'],
                 'url' => url('admin/layanan/delete')
             ],
-            "addButton" => url('admin/layanan/create'),
+            "addButton" => !$this->akses->AddData ? false : url('admin/layanan/create'),
             "excelButton" => true,
             "pdfButton" => true,
             "filters" => [
@@ -93,9 +101,10 @@ class LayananController extends Controller
 
         $params['pre_datatable'] = function ($datatable) {
             return $datatable->addColumn('action', function ($row) {
-                $button = '<a style="padding:5px;" class="text-warning" href="' . url('admin/layanan/create/' . my_encrypt($row->IDLayanan)) . '"><i class="feather icon-edit-1"></i></a>
-
-                    ';
+                $button = '';
+                if ($this->akses->EditData) {
+                    $button .= '<a style="padding:5px;" class="text-warning" href="' . url('admin/layanan/create/' . my_encrypt($row->IDLayanan)) . '"><i class="feather icon-edit-1"></i></a>';
+                }
                 return $button;
             })
                 ->setRowData([

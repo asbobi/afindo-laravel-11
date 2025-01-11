@@ -121,3 +121,13 @@ div.dataTables_wrapper {
     min-width: 68px;
     margin-bottom: 14px;
 }
+
+.brand-logo-mini{
+    display: none;
+}
+.menu-collapsed .brand-logo{
+    display: none;
+}
+.menu-collapsed .brand-logo-mini{
+    display: block;
+}

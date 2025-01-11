@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 class LoketController extends Controller
 {
     private $menu = 'Manajemen Loket';
+    private $loket;
     public function __construct()
     {
         View::share('menu', $this->menu);

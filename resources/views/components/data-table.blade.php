@@ -58,22 +58,86 @@
         </div>
     @endif
     <div class="btn-input-wrapper">
-        {!! isset($importButton) && $importButton != ""
-            ? '<a class="btn btn-warning" href="' . $importButton . '">Import</a>'
-            : "" !!}
-        {!! isset($excelButton) && $excelButton != ""
-            ? (!is_string($excelButton) && $excelButton != ""
-                ? '<button id="exportExcelBtn" class="btn btn-primary">Export Excel</button>'
-                : '<a class="btn btn-primary" href="' . $excelButton . '">Export Excel</a>')
-            : "" !!}
-        {!! isset($pdfButton) && $pdfButton != ""
-            ? (!is_string($pdfButton) && $pdfButton != ""
-                ? '<button id="printPdfBtn" class="btn btn-primary">Print Pdf</button>'
-                : '<a class="btn btn-primary" href="' . $pdfButton . '">Print Pdf</a>')
-            : "" !!}
-        {!! isset($addButton) && $addButton != ""
-            ? '<a class="btn btn-primary" href="' . $addButton . '">Tambah</a>'
-            : "" !!}
+        @foreach (array_reverse($buttons) as $button)
+            @if ($button["type"] == "import" && $button["url"] != "")
+                <a class="btn btn-warning"
+                    href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Import Excel" : $button["label"] }}</a>
+            @endif
+
+            @if ($button["type"] == "excel")
+                @if ($button["url"] != "")
+                    <a class="btn btn-primary"
+                        href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Export Excel" : $button["label"] }}</a>
+                @else
+                    <button id="exportExcelBtn"
+                        class="btn btn-primary">{{ empty($button["label"]) ? "Export Excel" : $button["label"] }}</button>
+                @endif
+            @endif
+
+            @if ($button["type"] == "pdf")
+                @if ($button["url"] != "")
+                    <a class="btn btn-primary"
+                        href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Print Pdf" : $button["label"] }}</a>
+                @else
+                    <button id="printPdfBtn"
+                        class="btn btn-primary">{{ empty($button["label"]) ? "Print Pdf" : $button["label"] }}</button>
+                @endif
+            @endif
+
+            @if ($button["type"] == "action")
+                @if (isset($button["options"]))
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary btn-min-width dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">{{ empty($button["label"]) ? "Aksi" : $button["label"] }}</button>
+                        <div class="dropdown-menu" x-placement="bottom-start"
+                            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 41px, 0px);">
+                            @foreach ($button["options"] as $option)
+                                @if (!empty($button["method"]))
+                                    @if ($option["method"] == "get")
+                                        <a class="dropdown-item" href="javascript:void(0)"
+                                            onclick="handleGetAction('{{ $option["url"] }}')">
+                                            {{ $option["label"] }}
+                                        </a>
+                                    @elseif ($option["method"] == "post")
+                                        <a class="dropdown-item" href="javascript:void(0)"
+                                            onclick="handlePostAction('{{ $option["url"] }}')">
+                                            {{ $option["label"] }}
+                                        </a>
+                                    @endif
+                                @else
+                                    <a class="dropdown-item" href="{{ $option["url"] }}">
+                                        {{ $option["label"] }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    @if (!empty($button["method"]))
+                        @if ($option["method"] == "get")
+                            <a class="btn btn-primary" href="javascript:void(0)"
+                                onclick="handleGetAction('{{ $option["url"] }}')">
+                                {{ $option["label"] }}
+                            </a>
+                        @elseif ($option["method"] == "post")
+                            <a class="btn btn-primary" href="javascript:void(0)"
+                                onclick="handlePostAction('{{ $option["url"] }}')">
+                                {{ $option["label"] }}
+                            </a>
+                        @endif
+                    @else
+                        <a href="{{ $button["url"] }}"
+                            class="btn btn-primary">{{ empty($button["label"]) ? "Aksi" : $button["label"] }}</a>
+                    @endif
+                @endif
+            @endif
+
+            @if ($button["type"] == "add" && $button["url"] != "")
+                <a class="btn btn-primary"
+                    href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Tambah" : $button["label"] }}</a>
+            @endif
+        @endforeach
     </div>
     {{-- @if ($title)
         <h4 class="mb-1">{{ $title }}</h4>
@@ -100,10 +164,12 @@
 
 @push("scripts")
     <script>
+        var selectedIds = [];
+
         $(document).ready(function() {
-            var selectedIds = [];
 
             var table = $('.yajra-datatable').DataTable({
+                order: [],
                 processing: true,
                 serverSide: true,
                 dom: 'lfr<"table-wrapper" t>ipB',
@@ -134,7 +200,7 @@
                                 class: "text-center",
                                 render: function(data, type, row) {
                                     return '<input type="checkbox" class="chebok" data-id="' + row
-                                        .NamaLayanan + '" />';
+                                        .idcheckbox + '" />';
                                 }
                             },
                         @else
@@ -154,7 +220,12 @@
                 ],
                 lengthChange: true,
                 buttons: [
-                    @if (is_bool($excelButton))
+                    @php
+                        $hasExcelButton = collect($buttons)->contains(function ($button) {
+                            return $button["type"] === "excel" && (!isset($button["url"]) || $button["url"] === "");
+                        });
+                    @endphp
+                    @if ($hasExcelButton)
 
                         {
                             extend: 'excelHtml5',
@@ -230,7 +301,12 @@
                             }
                         },
                     @endif
-                    @if (is_bool($pdfButton))
+                    @php
+                        $hasPdfButton = collect($buttons)->contains(function ($button) {
+                            return $button["type"] === "pdf" && (!isset($button["url"]) || $button["url"] === "");
+                        });
+                    @endphp
+                    @if (is_bool($hasPdfButton))
 
                         {
                             extend: 'pdfHtml5',
@@ -443,9 +519,18 @@
                     }
                 }
             });
+            @php
+                $hasDeleteButton = collect($buttons)->contains(function ($button) {
+                    return $button["type"] === "delete" && (!isset($button["url"]) || $button["url"] !== "");
+                });
+            @endphp
+            @if ($hasDeleteButton)
 
-            @if ($deleteButton)
-
+                @php
+                    $deleteButton = collect($buttons)->firstWhere("type", "delete");
+                    $deleteID = isset($deleteButton) && isset($deleteButton["param"]) ? $deleteButton["param"] : [];
+                    $deleteUrl = isset($deleteButton) && isset($deleteButton["url"]) ? $deleteButton["url"] : null;
+                @endphp
                 var deleteID = @json($deleteID);
                 $('.yajra-datatable').on('draw.dt', function() {
                     $('.yajra-datatable tbody tr').each(function() {
@@ -579,5 +664,65 @@
                 format: 'DD-MM-YYYY'
             }
         });
+
+        function handleGetAction(baseUrl) {
+            if (selectedIds.length > 0) {
+                var queryString = selectedIds.map(function(id) {
+                    return 'ids[]=' + id;
+                }).join('&');
+                window.location.href = baseUrl + '?' + queryString;
+            } else {
+                Swal.fire(
+                    'Error!',
+                    'Silakan pilih setidaknya satu item.',
+                    'error'
+                );
+            }
+        }
+
+        function handlePostAction(url) {
+            if (selectedIds.length > 0) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        ids: selectedIds,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === false) {
+                            Swal.fire(
+                                'Error!',
+                                response.message,
+                                'error'
+                            );
+                            return false;
+                        }
+
+                        Swal.fire(
+                            'Berhasil!',
+                            response.message,
+                            'success'
+                        );
+
+                        $('.yajra-datatable').DataTable().ajax.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire(
+                            'Error!',
+                            'Terjadi kesalahan: ' + error,
+                            'error'
+                        );
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Error!',
+                    'Silakan pilih setidaknya satu item.',
+                    'error'
+                );
+            }
+        }
     </script>
 @endpush

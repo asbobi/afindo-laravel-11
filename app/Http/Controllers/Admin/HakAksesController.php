@@ -17,7 +17,6 @@ class HakAksesController extends Controller
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
         $this->akseslevel = new Akseslevel();
-        // $this->middleware('auth');
         $this->akses = $this->getAkses();
     }
 

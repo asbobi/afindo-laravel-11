@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
-        $this->middleware('auth');
+        $this->akses = $this->getAkses();
     }
 
     public function index(Request $request)

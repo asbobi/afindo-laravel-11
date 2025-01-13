@@ -12,15 +12,9 @@ class DataTable extends Component
     public $ajaxUrl;
     public $title;
     public $columns = [];
-    public $importButton = '';
-    public $addButton = '';
-    public $excelButton = '';
-    public $pdfButton = '';
-    public $deleteButton = false;
-    public $deleteID = [];
-    public $deleteUrl = "";
     public $paginate = true;
     public $addRow = false;
+    public $buttons = [];
 
     public function __construct(
         $config,
@@ -29,16 +23,10 @@ class DataTable extends Component
         $this->ajaxUrl = @$config['ajaxUrl'];
         $this->title = @$config['title'];
         $this->columns = $this->processColumns($config['columns']);
-        $this->importButton = isset($config['importButton']) ? $config['importButton'] : false;
-        $this->addButton = isset($config['addButton']) ? $config['addButton'] : false;
-        $this->excelButton = isset($config['excelButton']) ? $config['excelButton'] : false;
-        $this->pdfButton = isset($config['pdfButton']) ? $config['pdfButton'] : false;
-        $this->deleteButton = isset($config['deleteButton']['status']) ? $config['deleteButton']['status'] : false;
-        $this->deleteID = $this->deleteButton ? $config['deleteButton']['param'] : '';
-        $this->deleteUrl = $this->deleteButton ? $config['deleteButton']['url'] : '';
         $this->config['filters'] = $this->config['filters'] ?? [];
         $this->paginate = isset($config['paginate']) ? $config['paginate'] : true;
         $this->addRow = isset($config['addRow']) ? $config['addRow'] : false;
+        $this->buttons = isset($config['buttons']) ? $config['buttons'] : [];
     }
 
     private function processColumns($columns)

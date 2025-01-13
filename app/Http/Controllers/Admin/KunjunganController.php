@@ -18,7 +18,6 @@ class KunjunganController extends Controller
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
         $this->kunjungan = new TrKunjungan();
-        // $this->middleware('auth');
         $this->akses = $this->getAkses();
     }
 
@@ -78,6 +77,22 @@ class KunjunganController extends Controller
             ],
         ];
 
+        $buttons = [];
+        ## opsional tambahkan pengecekan akses print data
+        if ($this->akses->PrintData) {
+            $printButton = [
+                [
+                    "type" => "pdf",
+                    'url' => "", // jika url kosong maka default print pdf datatable
+                ],
+                [
+                    "type" => "excel",
+                    'url' => "", // jika url kosong maka default export excel datatable
+                ],
+            ];
+            $buttons = array_merge($buttons, $printButton);
+        }
+
         ## ambil data untuk filter dropdown
         $lokets = Mstloket::select(['IDLoket AS value', 'NamaLoket AS label'])
             ->where('IsAktif', 1)
@@ -99,13 +114,8 @@ class KunjunganController extends Controller
             "addRow" => true,
             "ajaxUrl" => url('admin/kunjungan/listdata'),
             "columns" => $columns,
+            "buttons" => $buttons,
             "title" => "Data Kunjungan",
-            "deleteButton" => !$this->akses->DeleteData ? false : [
-                'status' => false
-            ],
-            "addButton" => false,
-            "excelButton" => true,
-            "pdfButton" => true,
             "filters" => [
                 [
                     'type' => 'select',

@@ -18,7 +18,6 @@ class LoketController extends Controller
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
         $this->loket = new Mstloket();
-        // $this->middleware('auth');
         $this->akses = $this->getAkses();
     }
 
@@ -76,18 +75,48 @@ class LoketController extends Controller
             ],
         ];
 
+        $buttons = [];
+        ## opsional tambahkan pengecekan akses add data
+        if ($this->akses->AddData) {
+            $buttons[] = [
+                "type" => "add",
+                "url" => url('admin/loket/create'),
+            ];
+        }
+
+        ## opsional tambahkan pengecekan akses delete data
+        if ($this->akses->DeleteData) {
+            $buttons[] = [
+                "type" => "delete",
+                'param' => ['id', 'no'],
+                'url' => url('admin/loket/delete'),
+            ];
+        }
+
+        ## opsional tambahkan pengecekan akses print data
+        if ($this->akses->PrintData) {
+            $printButton = [
+                [
+                    "type" => "pdf",
+                    'url' => "", // jika url kosong maka default print pdf datatable
+                ],
+                [
+                    "type" => "excel",
+                    'url' => "", // jika url kosong maka default export excel datatable
+                ],
+                [
+                    "type" => "import",
+                    'url' => url('admin/loket/create'), // contoh url form import
+                ]
+            ];
+            $buttons = array_merge($buttons, $printButton);
+        }
+
         $config = [
             "ajaxUrl" => url('admin/loket/listdata'),
             "columns" => $columns,
             "title" => "Data Loket",
-            "deleteButton" => !$this->akses->EditData ? false : [
-                'status' => true,
-                'param' => ['id', 'no'],
-                'url' => url('admin/loket/delete')
-            ],
-            "addButton" => !$this->akses->AddData ? false : url('admin/loket/create'),
-            "excelButton" => true,
-            "pdfButton" => true,
+            "buttons" => $buttons,
             "filters" => [
                 [
                     'type' => 'select',
@@ -168,11 +197,11 @@ class LoketController extends Controller
             return $datatable->editColumn('IsAvailable', function ($row) {
                 return $row->IsAvailable == 1 ? '&#10004;' : '&#x2716;';
             })->addColumn('action', function ($row) {
-                $button = '<a style="padding:5px;" class="text-warning" href="' . url('admin/loket/create/' . my_encrypt($row->IDLoket)) . '"><i class="feather icon-edit-1"></i></a>
-
-                    ';
+                $button = $this->akses->EditData ? '<a style="padding:5px;" class="text-warning" href="' . url('admin/loket/create/' . my_encrypt($row->IDLoket)) . '"><i class="feather icon-edit-1"></i></a>
+                ' : '';
                 return $button;
             })
+                ## tambahkan atribut data sesuai param yang digunakan pada deleteButton
                 ->setRowData([
                     'data-id' => function ($row) {
                         return my_encrypt($row->IDLoket);
@@ -191,12 +220,21 @@ class LoketController extends Controller
     {
         $x = [];
         if (isset($kode)) {
+            ## batasi akses pengguna
+            if (!$this->akses->EditData) {
+                abort(403, 'Unauthorized access');
+            }
             $IDLoket = Purify::clean(my_decrypt($kode));
             $x['data'] = $this->loket->getRow([
                 'where' => [
                     'IDLoket' => $IDLoket
                 ]
             ])['data'];
+        } else {
+            ## batasi akses pengguna
+            if (!$this->akses->AddData) {
+                abort(403, 'Unauthorized access');
+            }
         }
 
         return view('admin.loket.create', $x);

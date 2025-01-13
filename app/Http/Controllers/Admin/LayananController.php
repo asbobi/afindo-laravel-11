@@ -19,13 +19,13 @@ class LayananController extends Controller
         View::share('menu', $this->menu);
         View::share('title', $this->menu);
         $this->layanan = new Mstlayanan();
-        // $this->middleware('auth');
         $this->akses = $this->getAkses();
     }
 
     public function getIndex(Request $request)
     {
         $columns = [
+            ## untuk menambahkan checkbox pada datatable maka buatlah data dengan name => "checkbox" dan tambahkan idcheckbox pada value datatable
             [
                 "data" => null,
                 "orderable" => false,
@@ -38,6 +38,7 @@ class LayananController extends Controller
                 "orderable" => false,
                 "searchable" => false,
                 "name" => "No",
+                "class" => "text-center",
                 "cetak" => true,
                 "width" => "5%"
             ],
@@ -47,6 +48,7 @@ class LayananController extends Controller
                 "cetak" => true
             ],
             [
+                "orderable" => false,
                 "class" => "text-center",
                 "data" => "action",
                 "name" => "#",
@@ -56,25 +58,77 @@ class LayananController extends Controller
             ],
         ];
 
-        // if ($this->akses->DeleteData) {
-        //     $deleteButton = [
-        //         'status' => true,
-        //         'param' => ['id', 'no'],
-        //         'url' => url('admin/layanan/delete')
-        //     ];
-        // }
+        $buttons = [];
+        ## opsional tambahkan pengecekan akses add data
+        if ($this->akses->AddData) {
+            $buttons[] = [
+                "type" => "add",
+                "label" => "Tambah Data",
+                "url" => url('admin/layanan/create'),
+            ];
+        }
+
+        ## opsional tambahkan pengecekan akses delete data
+        if ($this->akses->DeleteData) {
+            $buttons[] = [
+                "type" => "delete",
+                'param' => ['id', 'no'],
+                'url' => url('admin/layanan/delete'),
+            ];
+        }
+
+        ## opsional tambahkan pengecekan akses print data
+        if ($this->akses->PrintData) {
+            $printButton = [
+                [
+                    "type" => "pdf",
+                    "label" => "Cetak Pdf",
+                    'url' => "", // jika url kosong maka default print pdf datatable
+                ],
+                [
+                    "type" => "excel",
+                    "label" => "Export Xlsx",
+                    'url' => "", // jika url kosong maka default export excel datatable
+                ],
+                [
+                    "type" => "import",
+                    "label" => "Import Xlsx",
+                    'url' => url('admin/layanan/create'), // contoh url form import
+                ]
+            ];
+            $buttons = array_merge($buttons, $printButton);
+        }
+
+        ## opsional tambahkan pengecekan akses edit data
+        if ($this->akses->EditData) {
+            $buttons[] = [
+                "type" => "action",
+                "label" => "Aksi",
+                ## tambahkan options jika ingin menampilkan button dropdowns
+                'options' => [
+                    [
+                        'label' => 'contoh aksi get',
+                        'url' => url('admin/layanan/aksi'),
+                        ## tambakan method jika ingin menggunakan opsi checkbox pada datatable
+                        'method' => 'get'
+                    ],
+                    [
+                        'label' => 'contoh aksi post',
+                        'url' => url('admin/layanan/aksi'),
+                        ## tambakan method jika ingin menggunakan opsi checkbox pada datatable
+                        'method' => 'post'
+                    ]
+                ],
+                'url' => '',
+                'method' => 'get'
+            ];
+        }
+
         $config = [
             "ajaxUrl" => url('admin/layanan/listdata'),
             "columns" => $columns,
+            "buttons" => $buttons,
             "title" => "Data Layanan",
-            "deleteButton" => !$this->akses->DeleteData ? false : [
-                'status' => true,
-                'param' => ['id', 'no'],
-                'url' => url('admin/layanan/delete')
-            ],
-            "addButton" => !$this->akses->AddData ? false : url('admin/layanan/create'),
-            "excelButton" => true,
-            "pdfButton" => true,
             "filters" => [
                 [
                     'type' => 'text',
@@ -114,6 +168,10 @@ class LayananController extends Controller
                 }
                 return $button;
             })
+                ## jika menambahkan checkbox pada datatable maka wajib menyertakan kolom "idcheckbox" sebagai id ketika checkbox di klik
+                ->addColumn('idcheckbox', function ($row) {
+                    return my_encrypt($row->IDLayanan);
+                })
                 ->setRowData([
                     'data-id' => function ($row) {
                         return my_encrypt($row->IDLayanan);
@@ -159,7 +217,6 @@ class LayananController extends Controller
                 'deskripsi' => 'Deskripsi Item 2',
             ]
         ]);
-
 
         $config = [
             'label' => 'Item Narasi',
@@ -270,5 +327,31 @@ class LayananController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function getAksi(Request $request)
+    {
+        ## batasi akses pengguna
+        if (!$this->akses->EditData) {
+            abort(403, 'Unauthorized access');
+        }
+        $insertdata = Purify::clean(request()->all());
+        foreach ($insertdata['ids'] as $key) {
+            $data = my_decrypt($key);
+            echo $data . '<br>';
+        }
+    }
+
+    public function postAksi(Request $request)
+    {
+        ## batasi akses pengguna
+        if (!$this->akses->EditData) {
+            abort(403, 'Unauthorized access');
+        }
+        $insertdata = Purify::clean(request()->except(['_token']));
+        foreach ($insertdata['ids'] as $key) {
+            $data = my_decrypt($key);
+        }
+        return response()->json(['status' => true, 'message' => "Berhasil kirim data."], 200);
     }
 }

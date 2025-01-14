@@ -541,13 +541,14 @@
     // main menu internationalization
 
     // init i18n and load language file
+    var baseUrl = "{{ url('/') }}";
     i18next
         .use(window.i18nextXHRBackend)
         .init({
                 debug: false,
                 fallbackLng: "en",
                 backend: {
-                    loadPath: "../../../app-assets/data/locales/{{lng}}.json",
+                    loadPath: baseUrl + "/app-assets/data/locales/{{lng}}.json",
                 },
                 returnObjects: true
             },
@@ -582,6 +583,6 @@
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         })
-  
+
 
 })(window, document, jQuery);

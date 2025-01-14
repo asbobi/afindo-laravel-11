@@ -66,7 +66,7 @@
 
             @if ($button["type"] == "excel")
                 @if ($button["url"] != "")
-                    <a class="btn btn-primary"
+                    <a class="btn btn-primary" id="exportExcelLink"
                         href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Export Excel" : $button["label"] }}</a>
                 @else
                     <button id="exportExcelBtn"
@@ -76,7 +76,7 @@
 
             @if ($button["type"] == "pdf")
                 @if ($button["url"] != "")
-                    <a class="btn btn-primary"
+                    <a class="btn btn-primary" id="printPdfLink"
                         href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Print Pdf" : $button["label"] }}</a>
                 @else
                     <button id="printPdfBtn"
@@ -509,9 +509,9 @@
                         $('tbody').append(totalRow);
                     }
                 },
-                language: {
+                /* language: {
                     url: "{{ asset("assets/js/language_id.json") }}",
-                },
+                }, */
                 initComplete: function(settings, json) {
                     let paging = {{ isset($paginate) && $paginate != true ? "false" : "true" }};
                     if (!paging && $(window).width() > 640) {
@@ -653,6 +653,44 @@
                 console.log('selectedIds : ', selectedIds);
                 var allChecked = ($('.chebok:checked').length === $('.chebok').length);
                 $('#checkAll').prop('checked', allChecked);
+            });
+
+            $('#exportExcelLink').on('click', function(e) {
+                e.preventDefault();
+                var baseUrl = $(this).attr('href');
+                var params = {};
+                $('.filter-input').each(function() {
+                    var input = $(this).find('input, select');
+                    var inputId = input.attr('id');
+                    var inputValue = input.val();
+
+                    if (inputValue) {
+                        params[inputId] = inputValue;
+                    }
+                });
+
+                var queryString = $.param(params);
+                var fullUrl = baseUrl + (baseUrl.indexOf('?') === -1 ? '?' : '&') + queryString;
+                window.open(fullUrl, '_blank');
+            });
+
+            $('#printPdfLink').on('click', function(e) {
+                e.preventDefault();
+                var baseUrl = $(this).attr('href');
+                var params = {};
+                $('.filter-input').each(function() {
+                    var input = $(this).find('input, select');
+                    var inputId = input.attr('id');
+                    var inputValue = input.val();
+
+                    if (inputValue) {
+                        params[inputId] = inputValue;
+                    }
+                });
+
+                var queryString = $.param(params);
+                var fullUrl = baseUrl + (baseUrl.indexOf('?') === -1 ? '?' : '&') + queryString;
+                window.open(fullUrl, '_blank');
             });
         });
 

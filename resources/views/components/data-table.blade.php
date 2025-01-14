@@ -2,61 +2,72 @@
     .paging-false {
         margin-top: 40px !important;
     }
+
+    table.dataTable {
+        width: 100%;
+        margin: 0 auto;
+        clear: both;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
 </style>
 <div>
     @if ($config["filters"])
-        <div class="filter-box">
-            <div class="table-filter">
-                <div class="row justify-content-end">
-                    @foreach ($config["filters"] as $filter)
-                        @if ($filter["type"] == "daterange")
-                            <div class="form-group col-4 filter-input">
-                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
-                                <div class="input-group">
-                                    <input type="text" class="form-control showdropdowns" id="{{ $filter["id"] }}">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <span class="fa fa-calendar"></span>
-                                        </span>
-                                    </div>
+    <div class="filter-box">
+        <div class="table-filter">
+            <div class="row justify-content-end">
+                @foreach ($config["filters"] as $filter)
+                    @if ($filter["type"] == "daterange")
+                        <div class="form-group col-4 filter-input">
+                            {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
+                            <div class="input-group">
+                                <input type="text" class="form-control showdropdowns" id="{{ $filter["id"] }}">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
                                 </div>
                             </div>
-                        @endif
-                        @if ($filter["type"] == "select")
-                            <div class="form-group col-4 filter-input">
-                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
-                                <select class="form-control select2" id="{{ $filter["id"] }}">
-                                    @if (isset($filter["options"]))
-                                        @foreach ($filter["options"] as $option)
-                                            <option value="{{ $option["value"] }}">{{ $option["label"] }}</option>
-                                        @endforeach
-                                    @else
-                                        <option value="">-</option>
-                                    @endif
-                                </select>
-                            </div>
-                        @endif
-                        @if ($filter["type"] == "text")
-                            <div class="form-group col-4">
-                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
-                                <fieldset class="form-group position-relative mb-0 filter-input">
-                                    <input type="text" class="form-control form-control-xl input-xl"
-                                        id="{{ $filter["id"] }}" placeholder="Pencarian ...">
-                                    <div class="form-control-position">
-                                        <i class="feather icon-search font-medium-4"></i>
-                                    </div>
-                                </fieldset>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
-            <div class="table-filter-button">
-                <button id="btn-cari" class="btn btn-primary" style="height: 40px;" type="button"><i
-                        class="feather icon-search font-medium-4"></i></button>
+                        </div>
+                    @endif
+                    @if ($filter["type"] == "select")
+                        <div class="form-group col-4 filter-input">
+                            {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
+                            <select class="form-control select2" id="{{ $filter["id"] }}">
+                                @if (isset($filter["options"]))
+                                    @foreach ($filter["options"] as $option)
+                                        <option value="{{ $option["value"] }}">{{ $option["label"] }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="">-</option>
+                                @endif
+                            </select>
+                        </div>
+                    @endif
+                    @if ($filter["type"] == "text")
+                        <div class="form-group col-4">
+                            {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
+                            <fieldset class="form-group position-relative mb-0 filter-input">
+                                <input type="text" class="form-control form-control-xl input-xl"
+                                    id="{{ $filter["id"] }}" placeholder="Pencarian ...">
+                                <div class="form-control-position">
+                                    <i class="feather icon-search font-medium-4"></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                    @endif
+                @endforeach
             </div>
         </div>
-    @endif
+        <div class="table-filter-button">
+            <button id="btn-cari" class="btn btn-primary" style="height: 40px;" type="button">
+                <i class="feather icon-search font-medium-4"></i>
+            </button>
+        </div>
+    </div>
+@endif
+
+
     <div class="btn-input-wrapper">
         @foreach (array_reverse($buttons) as $button)
             @if ($button["type"] == "import" && $button["url"] != "")

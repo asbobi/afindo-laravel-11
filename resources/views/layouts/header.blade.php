@@ -49,6 +49,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- END: Page CSS-->
 
+<link rel="stylesheet"href="{{ asset('app-assets/css/afindo.css') }}">
 <!-- BEGIN: Custom CSS-->
 {{-- <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/style.css") }}"> --}}
 <!-- END: Custom CSS-->

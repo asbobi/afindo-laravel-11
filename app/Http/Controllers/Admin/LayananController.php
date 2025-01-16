@@ -168,16 +168,17 @@ class LayananController extends Controller
                 }
                 return $button;
             })
-                ## jika menambahkan checkbox pada datatable maka wajib menyertakan kolom "idcheckbox" sebagai id ketika checkbox di klik
-                ->addColumn('idcheckbox', function ($row) {
+                /* ->addColumn('idcheckbox', function ($row) {
                     return my_encrypt($row->IDLayanan);
-                })
-                ->setRowData([
+                }) */
+
+                ## jika menambahkan checkbox pada datatable maka wajib menyertakan kolom "idcheckbox" sebagai id ketika checkbox di klik
+                ->setRowAttr([
                     'data-id' => function ($row) {
-                        return my_encrypt($row->IDLayanan);
+                        return my_encrypt_aday($row->IDLayanan);
+                        //return ($row->IDLayanan);
                     },
-                ])
-                ->rawColumns(['action']);
+                ])->rawColumns(['action']);
         };
 
         return $this->layanan->getRows($params);
@@ -337,7 +338,7 @@ class LayananController extends Controller
         }
         $insertdata = Purify::clean(request()->all());
         foreach ($insertdata['ids'] as $key) {
-            $data = my_decrypt($key);
+            $data = my_decrypt_aday($key);
             echo $data . '<br>';
         }
     }
@@ -350,7 +351,7 @@ class LayananController extends Controller
         }
         $insertdata = Purify::clean(request()->except(['_token']));
         foreach ($insertdata['ids'] as $key) {
-            $data = my_decrypt($key);
+            $data = my_decrypt_aday($key);
         }
         return response()->json(['status' => true, 'message' => "Berhasil kirim data."], 200);
     }

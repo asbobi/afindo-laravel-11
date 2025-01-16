@@ -13,3 +13,17 @@ if (!function_exists('my_decrypt')) {
         return app('my-encrypter')->decrypt($value);
     }
 }
+
+if (!function_exists('my_encrypt_aday')) {
+    function my_encrypt_aday($value)
+    {
+        return app('my-encrypter')->encryptWithExpiry($value);
+    }
+}
+
+if (!function_exists('my_decrypt_aday')) {
+    function my_decrypt_aday($value)
+    {
+        return app('my-encrypter')->decryptWithExpiry($value);
+    }
+}

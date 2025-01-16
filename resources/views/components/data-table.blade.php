@@ -239,8 +239,7 @@
                                 searchable: false,
                                 class: "text-center",
                                 render: function(data, type, row) {
-                                    return '<input type="checkbox" class="chebok" data-id="' + row
-                                        .idcheckbox + '" />';
+                                    return '<input type="checkbox" class="chebok" />';
                                 }
                             },
                         @else
@@ -668,7 +667,8 @@
                 $('.chebok').each(function() {
                     $(this).prop('checked', checked);
 
-                    var id = $(this).data('id');
+                    //var id = $(this).data('id');
+                    var id = $(this).closest('tr').data('id');
                     if (checked) {
                         if (!selectedIds.includes(id)) {
                             selectedIds.push(id);
@@ -682,7 +682,8 @@
             });
 
             $('.yajra-datatable').on('change', '.chebok', function() {
-                var id = $(this).data('id');
+                var id = $(this).closest('tr').data('id');
+                //var id = $(this).data('id');
                 if ($(this).prop('checked')) {
                     if (!selectedIds.includes(id)) {
                         selectedIds.push(id);
@@ -692,6 +693,20 @@
                 }
                 console.log('selectedIds : ', selectedIds);
                 var allChecked = ($('.chebok:checked').length === $('.chebok').length);
+                $('#checkAll').prop('checked', allChecked);
+            });
+
+            $('.yajra-datatable').on('draw.dt', function() {
+                console.log('draw.dt : ', selectedIds);
+                $('.chebok').each(function() {
+                    var rowId = $(this).closest('tr').data('id');
+
+                    if (selectedIds.includes(rowId)) {
+                        $(this).prop('checked', true);
+                    }
+                });
+
+                var allChecked = $('.chebok:checked').length === $('.chebok').length;
                 $('#checkAll').prop('checked', allChecked);
             });
 
@@ -785,6 +800,7 @@
                         );
 
                         $('.yajra-datatable').DataTable().ajax.reload();
+                        resetSelections();
                     },
                     error: function(xhr, status, error) {
                         Swal.fire(
@@ -801,6 +817,12 @@
                     'error'
                 );
             }
+        }
+
+        function resetSelections() {
+            selectedIds = [];
+            $('#checkAll').prop('checked', false);
+            $('.chebok').prop('checked', false);
         }
     </script>
 @endpush

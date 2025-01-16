@@ -7,14 +7,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <meta name="description"
-            content="Stack admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-        <meta name="keywords"
-            content="admin template, stack admin template, dashboard template, flat admin template, responsive admin template, web app">
-        <meta name="author" content="PIXINVENT">
-        <title>Login Page - Stack Responsive Bootstrap 4 Admin Template</title>
-        <link rel="apple-touch-icon" href="{{ asset("app-assets/images/ico/apple-icon-120.png") }}">
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset("app-assets/images/ico/favicon.ico") }}">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="AFINDO">
+        <title>Afindo Template</title>
+        <link rel="apple-touch-icon" href="{{ asset("app-assets/images/ico/logo.svg") }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset("app-assets/images/ico/logo.svg") }}">
         <link
             href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i%7COpen+Sans:300,300i,400,400i,600,600i,700,700i"
             rel="stylesheet">
@@ -64,12 +62,12 @@
                                     <div class="card-header border-0">
                                         <div class="card-title text-center">
                                             <div class="p-1"><img
-                                                    src="{{ asset("app-assets/images/logo/stack-logo-dark.png") }}"
+                                                    src="{{ asset("app-assets/images/logo/logo.png") }}"
                                                     alt="branding logo"></div>
                                         </div>
                                         <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
                                             <span>Login with
-                                                Stack</span>
+                                                Afindo</span>
                                         </h6>
                                     </div>
                                     <div class="card-content">
@@ -92,17 +90,16 @@
                                                     <div class="form-control-position">
                                                         <i class="fa fa-key"></i>
                                                     </div>
+                                                    <!-- Toggle Show/Hide Password Button -->
+                                                    <div class="form-control-position" style="right: 10px;">
+                                                        <i class="feather icon-eye" id="toggle-password"
+                                                            style="cursor: pointer;"></i>
+                                                    </div>
                                                 </fieldset>
                                                 <div class="form-group row">
-                                                    <div class="col-sm-6 col-12 text-center text-sm-left">
-                                                        <fieldset>
-                                                            <input type="checkbox" id="remember-me"
-                                                                class="chk-remember">
-                                                            <label for="remember-me"> Remember Me</label>
-                                                        </fieldset>
-                                                    </div>
+                                                    <div class="col-sm-6 col-12 text-center text-sm-left"></div>
                                                     <div class="col-sm-6 col-12 text-center text-sm-right">
-                                                        <a href="recover-password.html" class="card-link">Forgot
+                                                        <a href="recover-password.html" class="card-link">Lupa
                                                             Password?</a>
                                                     </div>
                                                 </div>
@@ -117,10 +114,8 @@
                                     </div>
                                     <div class="card-footer">
                                         <div class="">
-                                            <p class="float-sm-left text-center m-0"><a href="recover-password.html"
-                                                    class="card-link">Recover password</a></p>
-                                            <p class="float-sm-right text-center m-0">New to Stack? <a
-                                                    href="register-simple.html" class="card-link">Sign Up</a></p>
+                                            <p class="float-sm-right text-center m-0">Member baru? <a
+                                                    href="register-simple.html" class="card-link">Register</a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -150,6 +145,20 @@
         <script src="{{ asset("app-assets/js/scripts/forms/form-login-register.js") }}"></script>
         <!-- END: Page JS-->
         <script>
+            document.getElementById('toggle-password').addEventListener('click', function(e) {
+                const passwordInput = document.getElementById('user-password');
+                const icon = e.target;
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('icon-eye');
+                    icon.classList.add('icon-eye-off');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('icon-eye-off');
+                    icon.classList.add('icon-eye');
+                }
+            });
+
             document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 let formData = new FormData(this);

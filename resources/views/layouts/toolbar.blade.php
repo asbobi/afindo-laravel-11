@@ -175,14 +175,10 @@
                             href="#" data-toggle="dropdown">
                             <div class="avatar avatar-online"><img
                                     src="{{ asset('app-assets/images/portrait/small/avatar-s-1.png') }}"
-                                    alt="avatar"><i></i></div><span class="user-name">John Doe</span>
+                                    alt="avatar"></div><span class="user-name">John Doe</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item"
-                                href="user-profile.html"><i class="feather icon-user"></i> Edit Profile</a><a
-                                class="dropdown-item" href="app-email.html"><i class="feather icon-mail"></i> My
-                                Inbox</a><a class="dropdown-item" href="user-cards.html"><i
-                                    class="feather icon-check-square"></i> Task</a><a class="dropdown-item"
-                                href="app-chat.html"><i class="feather icon-message-square"></i> Chats</a>
+                                href="#"><i class="feather icon-user"></i> Edit Profile</a>
                             <div class="dropdown-divider"></div><a class="dropdown-item"
                                 href="{{ route('logout') }}"><i class="feather icon-power"></i> Logout</a>
                         </div>

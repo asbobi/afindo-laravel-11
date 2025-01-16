@@ -49,6 +49,7 @@
 
 <!-- BEGIN: Custom CSS-->
 {{-- <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/style.css") }}"> --}}
+<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/afindo.css") }}">
 <!-- END: Custom CSS-->
 <style>
     .brand-logo-mini {
@@ -63,4 +64,4 @@
         display: block;
     }
 </style>
-@vite(["resources/css/app.css", "resources/js/app.js"])
+{{-- @vite(["resources/css/app.css", "resources/js/app.js"]) --}}

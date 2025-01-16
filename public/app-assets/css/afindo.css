@@ -1,0 +1,144 @@
+div.dt-buttons {
+    position: relative;
+    float: left;
+    display: none;
+}
+
+.btn-datatabel {
+    margin: 2px;
+}
+
+.table tbody tr:last-child {
+    border-color: #dee2e6;
+}
+
+.filter {
+    height: 45px !important;
+}
+
+@media screen and (min-width: 768px) {
+
+    /* ketika screen width lebih dari 768px */
+    div.dataTables_wrapper div.dataTables_paginate {
+        margin-top: -8px;
+        white-space: nowrap;
+        text-align: right;
+        margin-right: -10px;
+    }
+}
+
+/* Gaya umum untuk pagination */
+.dataTables_wrapper .dataTables_paginate {
+    float: right;
+    margin-top: 10px;
+}
+
+/* Gaya untuk setiap elemen pagination (angka dan tombol) */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Gaya untuk angka aktif */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Gaya untuk tombol "Next" dan "Previous" */
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #eee;
+}
+
+/* Gaya untuk angka tidak dapat diklik pada pagination */
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    pointer-events: none;
+    color: #ccc;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 0px solid #ccc;
+    border-radius: 10px;
+    margin: 3px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+div.dataTables_wrapper {
+    padding-top: 10px;
+    width: 100%;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+    position: relative;
+}
+
+.btn-input-wrapper {
+    position: absolute;
+    right: 22px;
+    z-index: 999;
+}
+
+@media screen and (min-width: 768px) {
+    .table-filter {
+        width: 90%;
+    }
+
+    .filter-box {
+        display: flex;
+    }
+
+    .filter-box .col-4 {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+
+    .filter-box .row .form-group {
+        margin-bottom: 6px;
+    }
+
+    .table-filter-button {
+        margin-bottom: 0;
+        margin-top: 0;
+        padding-left: 1.5vw;
+        width: 10%;
+    }
+
+    .header .header-left {
+        max-width: 259px;
+    }
+
+    .page-wrapper>.content {
+        padding: 1.2rem 1.875rem 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .row-table {
+        margin-top: 60px;
+    }
+}
+
+.table-filter-button .btn {
+    width: 100%;
+    min-width: 68px;
+    margin-bottom: 14px;
+}
+
+.brand-logo-mini {
+    display: none;
+}
+
+.menu-collapsed .brand-logo {
+    display: none;
+}
+
+.menu-collapsed .brand-logo-mini {
+    display: block;
+}

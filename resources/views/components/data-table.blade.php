@@ -697,7 +697,6 @@
             });
 
             $('.yajra-datatable').on('draw.dt', function() {
-                console.log('draw.dt : ', selectedIds);
                 $('.chebok').each(function() {
                     var rowId = $(this).closest('tr').data('id');
 

@@ -168,6 +168,15 @@ class LayananController extends Controller
                 }
                 return $button;
             })
+                ## tambahkan atribut data sesuai param yang digunakan pada deleteButton
+                ->setRowData([
+                    'data-id' => function ($row) {
+                        return my_encrypt($row->IDLayanan);
+                    },
+                    'data-no' => function ($row) {
+                        return my_encrypt($row->IDLayanan);
+                    },
+                ])
                 /* ->addColumn('idcheckbox', function ($row) {
                     return my_encrypt($row->IDLayanan);
                 }) */

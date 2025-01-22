@@ -1,27 +1,98 @@
-<style>
-    .paging-false {
-        margin-top: 40px !important;
-    }
+@push('styles')
+    <style>
+        .paging-false {
+            margin-top: 40px !important;
+        }
 
-    table.dataTable {
-        width: 100%;
-        margin: 0 auto;
-        clear: both;
-        border-collapse: collapse;
-        border-spacing: 0;
-    }
-</style>
+        .table-wrapper {
+            border: solid 1px #dbe1e8;
+            border-radius: 8px;
+            border-top: solid 8px var(--primaryColor);
+        }
+
+        table.dataTable {
+            width: 100%;
+            margin: 0 auto;
+            clear: both;
+            border-collapse: collapse;
+            border-spacing: 0;
+            overflow: hidden;
+        }
+
+        table.dataTable thead th {
+            padding: 12px 10px;
+            font-size: 12.5px;
+            border-top: none;
+            border-bottom: 1px solid #e3ebf3 !important;
+        }
+
+        table.dataTable tbody td {
+            padding: 20px 10px;
+            font-size: 14px;
+        }
+
+        table.dataTable thead .sorting {
+            background: url(''); // buat hapus image aja
+        }
+
+        table.dataTable thead .sorting_asc,
+        table.dataTable thead .sorting_desc {
+            filter: grayscale(1);
+        }
+
+        table.dataTable.display tbody tr.odd {
+            background-color: #ffffff;
+        }
+
+        table.dataTable.display tbody tr.odd:hover {
+            background-color: #f6f6f6;
+        }
+
+        table.dataTable.display tbody tr.odd>.sorting_1,
+        table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
+            background-color: #fafafa;
+        }
+
+        table.dataTable.display tbody tr.odd:hover>.sorting_1,
+        table.dataTable.order-column.hover tbody tr.odd:hover>.sorting_1 {
+            background-color: #eaeaea;
+        }
+
+    
+        .table-wrapper::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+    
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            /* border-radius: 2px; */
+            border-radius: 9px;
+        }
+    
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #bac0c6;
+            /* border-radius: 2px; */
+            border-radius: 9px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #9fa8af;
+            filter: brightness(0.1);
+        }
+    </style>
+@endpush
 <div>
-    @if ($config["filters"])
+    @if ($config['filters'])
         <div class="filter-box">
             <div class="table-filter">
                 <div class="row justify-content-end">
-                    @foreach ($config["filters"] as $filter)
-                        @if ($filter["type"] == "daterange")
+                    @foreach ($config['filters'] as $filter)
+                        @if ($filter['type'] == 'daterange')
                             <div class="form-group col-4 filter-input">
-                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
+                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
                                 <div class="input-group">
-                                    <input type="text" class="form-control showdropdowns" id="{{ $filter["id"] }}">
+                                    <input type="text" class="form-control showdropdowns" id="{{ $filter['id'] }}">
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <span class="fa fa-calendar"></span>
@@ -31,13 +102,13 @@
                             </div>
                         @endif
 
-                        @if ($filter["type"] == "select")
+                        @if ($filter['type'] == 'select')
                             <div class="form-group col-4 filter-input">
-                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
-                                <select class="form-control select2" id="{{ $filter["id"] }}">
-                                    @if (isset($filter["options"]))
-                                        @foreach ($filter["options"] as $option)
-                                            <option value="{{ $option["value"] }}">{{ $option["label"] }}</option>
+                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
+                                <select class="form-control select2" id="{{ $filter['id'] }}">
+                                    @if (isset($filter['options']))
+                                        @foreach ($filter['options'] as $option)
+                                            <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
                                         @endforeach
                                     @else
                                         <option value="">-</option>
@@ -46,12 +117,12 @@
                             </div>
                         @endif
 
-                        @if ($filter["type"] == "text")
+                        @if ($filter['type'] == 'text')
                             <div class="form-group col-4">
-                                {!! isset($filter["label"]) && $filter["label"] != "" ? "<label>" . $filter["label"] . "</label>" : "" !!}
+                                {!! isset($filter['label']) && $filter['label'] != '' ? '<label>' . $filter['label'] . '</label>' : '' !!}
                                 <fieldset class="form-group position-relative mb-0 filter-input">
                                     <input type="text" class="form-control form-control-xl input-xl"
-                                        id="{{ $filter["id"] }}" placeholder="Pencarian ...">
+                                        id="{{ $filter['id'] }}" placeholder="Pencarian ...">
                                     <div class="form-control-position">
                                         <i class="feather icon-search font-medium-4"></i>
                                     </div>
@@ -71,83 +142,83 @@
 
     <div class="btn-input-wrapper">
         @foreach (array_reverse($buttons) as $button)
-            @if ($button["type"] == "import" && $button["url"] != "")
+            @if ($button['type'] == 'import' && $button['url'] != '')
                 <a class="btn btn-warning"
-                    href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Import Excel" : $button["label"] }}</a>
+                    href="{{ $button['url'] }}">{{ empty($button['label']) ? 'Import Excel' : $button['label'] }}</a>
             @endif
 
-            @if ($button["type"] == "excel")
-                @if ($button["url"] != "")
+            @if ($button['type'] == 'excel')
+                @if ($button['url'] != '')
                     <a class="btn btn-primary" id="exportExcelLink"
-                        href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Export Excel" : $button["label"] }}</a>
+                        href="{{ $button['url'] }}">{{ empty($button['label']) ? 'Export Excel' : $button['label'] }}</a>
                 @else
                     <button id="exportExcelBtn"
-                        class="btn btn-primary">{{ empty($button["label"]) ? "Export Excel" : $button["label"] }}</button>
+                        class="btn btn-primary">{{ empty($button['label']) ? 'Export Excel' : $button['label'] }}</button>
                 @endif
             @endif
 
-            @if ($button["type"] == "pdf")
-                @if ($button["url"] != "")
+            @if ($button['type'] == 'pdf')
+                @if ($button['url'] != '')
                     <a class="btn btn-primary" id="printPdfLink"
-                        href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Print Pdf" : $button["label"] }}</a>
+                        href="{{ $button['url'] }}">{{ empty($button['label']) ? 'Print Pdf' : $button['label'] }}</a>
                 @else
                     <button id="printPdfBtn"
-                        class="btn btn-primary">{{ empty($button["label"]) ? "Print Pdf" : $button["label"] }}</button>
+                        class="btn btn-primary">{{ empty($button['label']) ? 'Print Pdf' : $button['label'] }}</button>
                 @endif
             @endif
 
-            @if ($button["type"] == "action")
-                @if (isset($button["options"]))
+            @if ($button['type'] == 'action')
+                @if (isset($button['options']))
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary btn-min-width dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">{{ empty($button["label"]) ? "Aksi" : $button["label"] }}</button>
+                            aria-expanded="false">{{ empty($button['label']) ? 'Aksi' : $button['label'] }}</button>
                         <div class="dropdown-menu" x-placement="bottom-start"
                             style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 41px, 0px);">
-                            @foreach ($button["options"] as $option)
-                                @if (!empty($button["method"]))
-                                    @if ($option["method"] == "get")
+                            @foreach ($button['options'] as $option)
+                                @if (!empty($button['method']))
+                                    @if ($option['method'] == 'get')
                                         <a class="dropdown-item" href="javascript:void(0)"
-                                            onclick="handleGetAction('{{ $option["url"] }}')">
-                                            {{ $option["label"] }}
+                                            onclick="handleGetAction('{{ $option['url'] }}')">
+                                            {{ $option['label'] }}
                                         </a>
-                                    @elseif ($option["method"] == "post")
+                                    @elseif ($option['method'] == 'post')
                                         <a class="dropdown-item" href="javascript:void(0)"
-                                            onclick="handlePostAction('{{ $option["url"] }}')">
-                                            {{ $option["label"] }}
+                                            onclick="handlePostAction('{{ $option['url'] }}')">
+                                            {{ $option['label'] }}
                                         </a>
                                     @endif
                                 @else
-                                    <a class="dropdown-item" href="{{ $option["url"] }}">
-                                        {{ $option["label"] }}
+                                    <a class="dropdown-item" href="{{ $option['url'] }}">
+                                        {{ $option['label'] }}
                                     </a>
                                 @endif
                             @endforeach
                         </div>
                     </div>
                 @else
-                    @if (!empty($button["method"]))
-                        @if ($option["method"] == "get")
+                    @if (!empty($button['method']))
+                        @if ($option['method'] == 'get')
                             <a class="btn btn-primary" href="javascript:void(0)"
-                                onclick="handleGetAction('{{ $option["url"] }}')">
-                                {{ $option["label"] }}
+                                onclick="handleGetAction('{{ $option['url'] }}')">
+                                {{ $option['label'] }}
                             </a>
-                        @elseif ($option["method"] == "post")
+                        @elseif ($option['method'] == 'post')
                             <a class="btn btn-primary" href="javascript:void(0)"
-                                onclick="handlePostAction('{{ $option["url"] }}')">
-                                {{ $option["label"] }}
+                                onclick="handlePostAction('{{ $option['url'] }}')">
+                                {{ $option['label'] }}
                             </a>
                         @endif
                     @else
-                        <a href="{{ $button["url"] }}"
-                            class="btn btn-primary">{{ empty($button["label"]) ? "Aksi" : $button["label"] }}</a>
+                        <a href="{{ $button['url'] }}"
+                            class="btn btn-primary">{{ empty($button['label']) ? 'Aksi' : $button['label'] }}</a>
                     @endif
                 @endif
             @endif
 
-            @if ($button["type"] == "add" && $button["url"] != "")
+            @if ($button['type'] == 'add' && $button['url'] != '')
                 <a class="btn btn-primary"
-                    href="{{ $button["url"] }}">{{ empty($button["label"]) ? "Tambah" : $button["label"] }}</a>
+                    href="{{ $button['url'] }}">{{ empty($button['label']) ? 'Tambah' : $button['label'] }}</a>
             @endif
         @endforeach
     </div>
@@ -156,14 +227,14 @@
     @endif --}}
     <div class="row row-table">
         <div class="col-12">
-            <table class="table table-striped table-bordered zero-configuration yajra-datatable display" width="100%">
+            <table class="table zero-configuration yajra-datatable display" width="100%">
                 <thead>
                     <tr>
                         @foreach ($columns as $column)
-                            @if ($column["name"] == "checkbox")
+                            @if ($column['name'] == 'checkbox')
                                 <th><input type="checkbox" id="checkAll" /></th>
                             @else
-                                <th>{{ $column["name"] }}</th>
+                                <th>{{ $column['name'] }}</th>
                             @endif
                         @endforeach
                     </tr>
@@ -174,7 +245,7 @@
     </div>
 </div>
 
-@push("scripts")
+@push('scripts')
     <script>
         var selectedIds = [];
 
@@ -214,7 +285,7 @@
                 serverSide: true,
                 dom: 'lfr<"table-wrapper" t>ipB',
                 searching: false,
-                paging: {{ isset($paginate) && $paginate != true ? "false" : "true" }},
+                paging: {{ isset($paginate) && $paginate != true ? 'false' : 'true' }},
                 ajax: {
                     url: "{{ $ajaxUrl }}",
                     data: function(d) {
@@ -232,7 +303,7 @@
                 // columns: {!! json_encode($columns) !!},
                 columns: [
                     @foreach ($columns as $index => $column)
-                        @if (isset($column["name"]) && $column["name"] === "checkbox")
+                        @if (isset($column['name']) && $column['name'] === 'checkbox')
                             {
                                 data: null,
                                 orderable: false,
@@ -249,9 +320,9 @@
                 ],
                 columnDefs: [
                     @foreach ($columns as $index => $column)
-                        @if (isset($column["width"]))
+                        @if (isset($column['width']))
                             {
-                                width: "{{ $column["width"] }}",
+                                width: "{{ $column['width'] }}",
                                 targets: {{ $index }}
                             },
                         @endif
@@ -261,7 +332,7 @@
                 buttons: [
                     @php
                         $hasExcelButton = collect($buttons)->contains(function ($button) {
-                            return $button["type"] === "excel" && (!isset($button["url"]) || $button["url"] === "");
+                            return $button['type'] === 'excel' && (!isset($button['url']) || $button['url'] === '');
                         });
                     @endphp
                     @if ($hasExcelButton)
@@ -276,12 +347,12 @@
                             customize: function(xlsx) {
                                 @php
                                     $excelColumns = array_filter($columns, function ($column) {
-                                        return isset($column["cetak"]) && $column["cetak"] === true;
+                                        return isset($column['cetak']) && $column['cetak'] === true;
                                     });
                                 @endphp
                                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
                                 var totalColumns = {!! json_encode($excelColumns) !!};
-                                var addRow = {{ $addRow ? "true" : "false" }};
+                                var addRow = {{ $addRow ? 'true' : 'false' }};
 
                                 if (addRow) {
                                     var totalRowExcel = '<row>';
@@ -342,7 +413,7 @@
                     @endif
                     @php
                         $hasPdfButton = collect($buttons)->contains(function ($button) {
-                            return $button["type"] === "pdf" && (!isset($button["url"]) || $button["url"] === "");
+                            return $button['type'] === 'pdf' && (!isset($button['url']) || $button['url'] === '');
                         });
                     @endphp
                     @if (is_bool($hasPdfButton))
@@ -391,12 +462,12 @@
 
                                 @php
                                     $pdfColumns = array_filter($columns, function ($column) {
-                                        return isset($column["cetak"]) && $column["cetak"] === true;
+                                        return isset($column['cetak']) && $column['cetak'] === true;
                                     });
                                 @endphp
                                 var api = $('.yajra-datatable').DataTable();
                                 var totalColumns = {!! json_encode($pdfColumns) !!};
-                                var addRow = {{ $addRow ? "true" : "false" }};
+                                var addRow = {{ $addRow ? 'true' : 'false' }};
                                 var totalValues = {};
                                 var totalIndexes = [];
 
@@ -485,7 +556,7 @@
                     var api = this.api();
                     $('tr.custom-row').remove();
                     var totalColumns = {!! json_encode($columns) !!};
-                    var addRow = {{ $addRow ? "true" : "false" }};
+                    var addRow = {{ $addRow ? 'true' : 'false' }};
                     if (addRow) {
                         var totalValues = {};
                         var totalIndexes = [];
@@ -549,10 +620,10 @@
                     }
                 },
                 /* language: {
-                    url: "{{ asset("assets/js/language_id.json") }}",
+                    url: "{{ asset('assets/js/language_id.json') }}",
                 }, */
                 initComplete: function(settings, json) {
-                    let paging = {{ isset($paginate) && $paginate != true ? "false" : "true" }};
+                    let paging = {{ isset($paginate) && $paginate != true ? 'false' : 'true' }};
                     if (!paging && $(window).width() > 640) {
                         $('.dataTables_wrapper').addClass('paging-false');
                     }
@@ -560,15 +631,15 @@
             });
             @php
                 $hasDeleteButton = collect($buttons)->contains(function ($button) {
-                    return $button["type"] === "delete" && (!isset($button["url"]) || $button["url"] !== "");
+                    return $button['type'] === 'delete' && (!isset($button['url']) || $button['url'] !== '');
                 });
             @endphp
             @if ($hasDeleteButton)
 
                 @php
-                    $deleteButton = collect($buttons)->firstWhere("type", "delete");
-                    $deleteID = isset($deleteButton) && isset($deleteButton["param"]) ? $deleteButton["param"] : [];
-                    $deleteUrl = isset($deleteButton) && isset($deleteButton["url"]) ? $deleteButton["url"] : null;
+                    $deleteButton = collect($buttons)->firstWhere('type', 'delete');
+                    $deleteID = isset($deleteButton) && isset($deleteButton['param']) ? $deleteButton['param'] : [];
+                    $deleteUrl = isset($deleteButton) && isset($deleteButton['url']) ? $deleteButton['url'] : null;
                 @endphp
                 var deleteID = @json($deleteID);
                 $('.yajra-datatable').on('draw.dt', function() {

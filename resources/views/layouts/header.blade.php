@@ -51,7 +51,7 @@
 
 <!-- BEGIN: Custom CSS-->
 {{-- <link rel="stylesheet" type="text/css" href="{{ asset("assets/css/style.css") }}"> --}}
-<link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/afindo.css") }}">
+{{-- <link rel="stylesheet" type="text/css" href="{{ asset("app-assets/css/afindo.css") }}"> --}}
 <!-- END: Custom CSS-->
 <style>
     .brand-logo-mini {

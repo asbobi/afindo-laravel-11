@@ -1,7 +1,7 @@
 @php
     $data_fitur = cache("akses_user")->toArray();
     $arr = [];
-    $jumlahmenu = count($data_fitur) + 100;
+    $jumlahmenu = count($data_fitur);
 @endphp
 
 @foreach ($data_fitur as $row)

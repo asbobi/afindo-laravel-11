@@ -1,7 +1,7 @@
 @php
     $data_fitur = cache("akses_user")->toArray();
     $arr = [];
-    $jumlahmenu = count($data_fitur);
+    $jumlahmenu = count($data_fitur) + 100;
 @endphp
 
 @foreach ($data_fitur as $row)
@@ -49,7 +49,7 @@
 
                                     <li {!! $active !!}>
                                         <a href="{{ url($url) }}"><span
-                                                class="menu-title">{{ $v->NamaFitur }}</span></a>
+                                                class="menu-item">{{ $v->NamaFitur }}</span></a>
                                     </li>
                                 @endforeach
                             </ul>

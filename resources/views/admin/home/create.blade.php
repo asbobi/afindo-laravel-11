@@ -21,7 +21,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="label-control">Nama Loket</label>
-                                                <input type="text" class="form-control border-primary"
+                                                <input type="text" class="form-control"
                                                     placeholder="Masukkan Nama Loket" name="NamaLoket"
                                                     value="{{ @$data["NamaLoket"] }}" required>
                                             </div>
@@ -41,7 +41,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="label-control">No. Loket</label>
-                                                <input type="number" class="form-control border-primary"
+                                                <input type="number" class="form-control"
                                                     placeholder="Masukkan No Loket" name="NoLoket"
                                                     value="{{ @$data["NoLoket"] }}" required>
                                             </div>

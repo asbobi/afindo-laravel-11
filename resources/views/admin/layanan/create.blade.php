@@ -30,7 +30,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="label-control">Nama Layanan</label>
-                                                <input type="text" class="form-control border-primary"
+                                                <input type="text" class="form-control"
                                                     placeholder="Masukkan Nama Layanan" name="NamaLayanan"
                                                     value="{{ @$data['NamaLayanan'] }}" required>
                                             </div>

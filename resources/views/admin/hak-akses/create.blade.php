@@ -23,7 +23,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="label-control">Nama Level</label>
-                                                <input type="text" class="form-control border-primary"
+                                                <input type="text" class="form-control"
                                                     placeholder="Masukkan Nama Level" name="NamaLevel"
                                                     value="{{ @$data->NamaLevel }}" required>
                                             </div>

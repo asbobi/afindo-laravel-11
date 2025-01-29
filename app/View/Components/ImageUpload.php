@@ -12,6 +12,8 @@ class ImageUpload extends Component
     public $name;
     public $value;
     public $url;
+    public $panjang;
+    public $lebar;
 
     /**
      * Buat instance komponen.
@@ -21,13 +23,17 @@ class ImageUpload extends Component
      * @param string $label
      * @param string $value
      * @param string $url
+     * @param int $panjang
+     * @param int $lebar
      */
-    public function __construct($id, $name, $value = "", $url = "")
+    public function __construct($id, $name, $value = "", $url = "", $panjang = 9, $lebar = 16)
     {
         $this->id = $id;
         $this->name = $name;
         $this->value = $value;
         $this->url = $url;
+        $this->panjang = $panjang;
+        $this->lebar = $lebar;
     }
 
     /**

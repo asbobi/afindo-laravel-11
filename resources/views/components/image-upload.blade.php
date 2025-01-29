@@ -62,7 +62,7 @@
             $('#modal_cropper').on('shown.bs.modal', function() {
                 cropper = new Cropper(imageCropping, {
                     viewMode: 1,
-                    aspectRatio: 16 / 9
+                    aspectRatio: '{{ $lebar }}' / '{{ $panjang }}',
                 });
             }).on('hidden.bs.modal', function() {
                 cropper.destroy();

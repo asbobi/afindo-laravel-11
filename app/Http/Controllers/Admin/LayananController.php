@@ -181,7 +181,7 @@ class LayananController extends Controller
                     return my_encrypt($row->IDLayanan);
                 }) */
 
-                ## jika menambahkan checkbox pada datatable maka wajib menyertakan kolom "idcheckbox" sebagai id ketika checkbox di klik
+                ## jika menambahkan checkbox pada datatable maka wajib menyertakan sebagai id ketika checkbox di klik
                 ->setRowAttr([
                     'data-id' => function ($row) {
                         return my_encrypt_aday($row->IDLayanan);

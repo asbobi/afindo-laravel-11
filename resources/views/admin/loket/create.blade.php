@@ -36,7 +36,7 @@
                                             <div class="form-group">
                                                 <label class="label-control">File Gambar</label>
                                                 <x-image-upload id="FotoLoket" name="FotoLoket" :value="$fotoLoket"
-                                                    :url="$urlFotoLoket" />
+                                                    :url="$urlFotoLoket" :panjang="3" :lebar="3" />
                                             </div>
                                             <div class="form-group">
                                                 <div class="controls">

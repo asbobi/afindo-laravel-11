@@ -146,7 +146,7 @@
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
-        const addElm = $('#{{ $id }}').find('.add-image-col').prop('outerHTML');
+        const addElm{{$id}} = $('#{{ $id }}').find('.add-image-col').prop('outerHTML');
 
         let {{ $id }} = '{!! @$defaultValue ? json_encode(@$defaultValue) : '' !!}';
         if ({{ $id }} !== '') {
@@ -155,17 +155,17 @@
         }
 
         function adjustAddImageHeight(el) {
-            console.log('width : '+$('.add-image-col').width());
-            console.log('heigth : '+$('.add-image-col').width() * {{ $lebar }} / {{ $panjang }});
-            console.log($(el).find('.add-image-col').length);
-            $(el).find('.add-image-col').height($('.add-image-col').width() * {{ $lebar }} / {{ $panjang }});
+            $(el).find('.add-image-col').height($(el).find('.add-image-col').width() * {{ $lebar }} / {{ $panjang }});
         }
         adjustAddImageHeight('#{{ $id }}');
 
         window.addEventListener('resize', ()=>{adjustAddImageHeight('#{{ $id }}')});
 
-        function initAddImage() {
-            $('#{{ $id }}').find('.add-image').off('click').on('click', function() {
+        function initAddImage(el) {
+            console.log('initAddImage', el);
+            $(el).find('.add-image').off('click').on('click', function() {
+                console.log('clicked', el);
+                
                 try {
                     let fileInput = $(this).closest('.gallery').find('#add-image-input');
                     if (fileInput.length) {
@@ -176,7 +176,7 @@
                 }
             });
         }
-        initAddImage();
+        initAddImage('#{{ $id }}');
 
         function updateGallery(galleryId, images) {
             let el = $(galleryId).find('.list-gallery');
@@ -209,11 +209,11 @@
             });
 
 
-            html += addElm;
+            html += addElm{{ $id }};
 
             el.html(html);
-            adjustAddImageHeight('#{{ $id }}');
-            initAddImage();
+            adjustAddImageHeight(galleryId);
+            initAddImage(galleryId);
         }
 
         function removeImage(index) {
@@ -239,16 +239,16 @@
                     selectedFile = files[0]; // Store selected file
                     let imageUrl = URL.createObjectURL(selectedFile);
 
-                    $('#cropper-modal img').attr('src', imageUrl);
-                    $('#cropper-modal').modal('show');
+                    $('#cropper-modal[data-by="#{{$id}}"] img').attr('src', imageUrl);
+                    $('#cropper-modal[data-by="#{{$id}}"]').modal('show');
 
-                    $('#cropper-modal img').on('load', function() {
+                    $('#cropper-modal[data-by="#{{$id}}"] img').on('load', function() {
                         if (cropper) {
                             cropper.destroy();
                         }
                         cropper = new Cropper(this, {
                             aspectRatio: {{ $panjang }} / {{ $lebar }},
-                            viewMode: 0,
+                            viewMode: 1,
                             autoCropArea: 1,
                             minContainerWidth: 800,
                             minContainerHeight: 600
@@ -269,8 +269,8 @@
 
                         {{ $var }}.push(file);
                         updateGallery('#{{ $id }}', {{ $var }});
-
-                        $('#cropper-modal').modal('hide');
+                        
+                        $('#cropper-modal[data-by="#{{$id}}"]').modal('hide');
                         $('#{{ $id }}').find('#add-image-input').val('');
                         cropper.destroy();
                     }, 'image/jpeg');

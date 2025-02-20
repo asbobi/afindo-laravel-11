@@ -15,6 +15,9 @@ class MyModel extends Model
 
     public function uploadFile($fileName, $uploadPath, $allowedFile = ['jpg', 'png'], $maxFileSize = 2048, $oldFile = '')
     {
+        if (count(request()->file($fileName))) {
+            return $this->uploadFileMulti($fileName, $uploadPath, $allowedFile, $maxFileSize, $oldFile);
+        }
         //validation
         $maxSize = $maxFileSize;
         $file = request()->file($fileName);
@@ -62,6 +65,59 @@ class MyModel extends Model
         }
         return ['status' => false, 'message' => 'gagal mengupload file.'];
     }
+
+    public function uploadFileMulti($fileName, $uploadPath, $allowedFile = ['jpg', 'png'], $maxFileSize = 2048, $oldFile = '')
+    {
+        $maxSize = $maxFileSize;
+        $files = request()->file($fileName) ?? [];
+        $uploadedFiles = [];
+        $errors = [];
+        $uploadPath = 'public/' . $uploadPath;
+
+        foreach ($files as $file) {
+            if ($file->getSize() > $maxSize * 1024) {
+                $errors[] = 'Ukuran file ' . $file->getClientOriginalName() . ' tidak boleh melebihi ' . $maxSize . ' KB';
+                continue;
+            }
+
+            if (!Storage::exists($uploadPath)) {
+                Storage::makeDirectory($uploadPath);
+            }
+
+            if (!is_writable(Storage::path($uploadPath))) {
+                return ['status' => false, 'message' => 'Folder tidak dapat dimodifikasi.'];
+            }
+
+            if ($file->isValid()) {
+                if (!in_array($file->extension(), $allowedFile)) {
+                    $errors[] = 'Ekstensi file ' . $file->getClientOriginalName() . ' tidak didukung.';
+                    continue; // Skip invalid file
+                }
+
+                $uniqueFileName = uniqid() . '_' . $file->getClientOriginalName();
+
+                if ($oldFile !== '' && Storage::exists($uploadPath . '/' . $oldFile)) {
+                    Storage::delete($uploadPath . '/' . $oldFile);
+                }
+
+                $res = $file->storeAs($uploadPath, $uniqueFileName);
+                if ($res) {
+                    $uploadedFiles[] = $uniqueFileName;
+                } else {
+                    $errors[] = 'Gagal mengupload file ' . $file->getClientOriginalName();
+                }
+            } else {
+                $errors[] = 'Gagal mengupload file ' . $file->getClientOriginalName();
+            }
+        }
+
+        if (!empty($uploadedFiles)) {
+            return ['status' => true, 'message' => 'Berhasil mengupload file.', 'data' => $uploadedFiles];
+        }
+
+        return ['status' => false, 'message' => 'Gagal mengupload beberapa atau semua file.', 'errors' => $errors];
+    }
+
 
     public function getAliases($column = null)
     {
@@ -651,6 +707,9 @@ class MyModel extends Model
         $query = $this->newQuery();
 
         if (isset($params)) {
+            if (isset($params['from'])) {
+                $query = DB::table($params['from']);
+            }
             $withModels = null; //untuk with nanti
             // preQuery
             if (isset($params['preQuery'])) {

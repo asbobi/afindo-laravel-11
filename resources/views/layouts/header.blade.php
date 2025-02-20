@@ -4,7 +4,7 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta name="author" content="AFINDO">
-<title>Afindo Template</title>
+<title>{{ $title ? $title.' - ' : '' }}Afindo Template</title>
 <link rel="apple-touch-icon" href="{{ asset("app-assets/images/ico/logo.svg") }}">
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset("app-assets/images/ico/logo.svg") }}">
 <link
